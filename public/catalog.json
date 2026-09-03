@@ -1,0 +1,108 @@
+{
+  "publishers": [
+    {
+      "id": "gruppo-albatros",
+      "name": "Gruppo Albatros Il Filo",
+      "logo": "logos/logoalbatros-sfondo-trasparente - Ginevra Grasso.png",
+      "bio": "Our Group was founded in 2002, building on the experience of the publishing house Il Filo, which incorporated the name of its most prominent series, Albatros, into its company name. This is how the name Gruppo Albatros Il Filo came about. Our publishing strategy has always focused on achieving a balance between major names in Italian and international literature and emerging authors. Our distribution is handled by Messaggerie Libri S.p.A. The brands within our Group also include Caos Film, which specialises in television, radio and film productions.",
+      "url": "https://www.gruppoalbatros.com/",
+      "email": "info@gruppoalbatros.com",
+      "phone": "06.90289732",
+      "address": "Via dei campi flegrei 14, 00141 Roma"
+    },
+    {
+      "id": "lascott",
+      "name": "Lascott",
+      "logo": "logos/LogoLascott-Vector - Nicola Scotto di Carlo.svg",
+      "bio": "GrandTour is an Italian editorial and cultural platform devoted to the discovery, interpretation and promotion of territories through high-quality storytelling. We create editorial projects, magazines, books, audiovisual productions and digital experiences that connect travel, heritage, landscapes, communities and contemporary culture. Our work combines journalistic research, visual language and technological innovation to offer readers and audiences authentic, inspiring perspectives on Italy and the Mediterranean. GrandTour collaborates with institutions, cultural organisations, tourism stakeholders and creative professionals to turn local identity into accessible, internationally relevant narratives. Based in Naples, GrandTour is part of Lascott, a company specialising in culture, communication and innovation.",
+      "url": "https://www.grandtourworld.it/",
+      "email": "produzione@lascott.it",
+      "phone": "0819763862",
+      "address": "Via Toledo 205"
+    },
+    {
+      "id": "kimerik",
+      "name": "Casa Editrice Kimerik",
+      "logo": "logos/logo-kimerik - Pia Kimerik.png",
+      "bio": "Founded in Patti, Sicily, Casa Editrice Kimerik is a prominent independent Italian publishing house dedicated to discovering, nurturing, and promoting both emerging writers and established authors. With over two decades of editorial passion, Kimerik publishes a diverse catalog spanning fiction, poetry, non-fiction, children’s literature, and academic works. Combining traditional publishing standards with dynamic modern distribution, Kimerik ensures widespread presence across major online retailers, physical bookstores, and national book fairs. Driven by editorial integrity, transparent author relations, and high-quality production, Casa Editrice Kimerik serves as a vital cultural bridge, giving voice to compelling stories and bringing captivating literature to readers worldwide.",
+      "url": "https://www.kimerik.it/",
+      "email": "segreteria@kimerik.it",
+      "phone": "094121503",
+      "address": "Via Francesco Crispi, 57"
+    }
+  ],
+  "books": [
+    {
+      "id": "rosso-amarone",
+      "title": "Rosso amarone",
+      "bookAuthor": "Agnese Di Sarli",
+      "publisherId": "gruppo-albatros",
+      "cover": "covers/HQpiattoDiSarli - Ginevra Grasso.jpg",
+      "summary": "Title submitted by Gruppo Albatros Il Filo for the Swedish market. Individual English synopsis not provided in the catalog form.",
+      "url": "https://www.gruppoalbatros.com/"
+    },
+    {
+      "id": "anna-e-non-puo-essere-un-caso",
+      "title": "Anna, e non può essere un caso",
+      "bookAuthor": "Anna Stan",
+      "publisherId": "gruppo-albatros",
+      "cover": "covers/zanichelli HQ - Ginevra Grasso.jpg",
+      "summary": "Title submitted by Gruppo Albatros Il Filo for the Swedish market. Individual English synopsis not provided in the catalog form.",
+      "url": "https://www.gruppoalbatros.com/"
+    },
+    {
+      "id": "nella-vita-come-nelle-fiabe",
+      "title": "Nella vita come nelle fiabe… per non dimenticare",
+      "bookAuthor": "Carmela Murtas",
+      "publisherId": "gruppo-albatros",
+      "cover": "covers/cover02 - Ginevra Grasso.jpg",
+      "summary": "Title submitted by Gruppo Albatros Il Filo for the Swedish market. Individual English synopsis not provided in the catalog form.",
+      "url": "https://www.gruppoalbatros.com/"
+    },
+    {
+      "id": "il-dolore-che-mi-ha-insegnato-a-vivere",
+      "title": "Il dolore che mi ha insegnato a vivere",
+      "bookAuthor": "Domenico Terracciano",
+      "publisherId": "gruppo-albatros",
+      "cover": "covers/HQterracianopiatto - Ginevra Grasso.jpg",
+      "summary": "Title submitted by Gruppo Albatros Il Filo for the Swedish market. Individual English synopsis not provided in the catalog form.",
+      "url": "https://www.gruppoalbatros.com/"
+    },
+    {
+      "id": "482",
+      "title": "482",
+      "bookAuthor": "Isotta Blue",
+      "publisherId": "gruppo-albatros",
+      "cover": "covers/piattpErrico - Ginevra Grasso.jpg",
+      "summary": "Title submitted by Gruppo Albatros Il Filo for the Swedish market. Individual English synopsis not provided in the catalog form.",
+      "url": "https://www.gruppoalbatros.com/"
+    },
+    {
+      "id": "grandtour-n8",
+      "title": "GrandTour Magazine — n.8 (January/February 2026)",
+      "bookAuthor": "GrandTour",
+      "publisherId": "lascott",
+      "cover": "covers/GT_N8_COVER - Nicola Scotto di Carlo.jpg",
+      "summary": "GrandTour Magazine is an independent Italian periodical dedicated to understanding contemporary worlds through long-form journalism, reportage, interviews and visual storytelling. Issue n.8: The Future of Small Islands — from idyllic escapes to fragile ecosystems. Also featuring: Will AI make us immortal?; Palermo: a city of a thousand faces; The green side of London.",
+      "url": "https://www.grandtourworld.it/"
+    },
+    {
+      "id": "grandtour-n10",
+      "title": "GrandTour Magazine — n.10 (May/June 2026)",
+      "bookAuthor": "GrandTour",
+      "publisherId": "lascott",
+      "cover": "covers/GT_N10_COVER - Nicola Scotto di Carlo.jpg",
+      "summary": "GrandTour Magazine explores human geography, biodiversity, science, archaeology, food, cultures, communities and technological change. Issue n.10: The Children of the Ocean — young fishers from Papua New Guinea’s Kimbe Bay and the delicate balance between nature and the future. Also featuring: In praise of folly; Lebanon’s Starry Skies; Through the lens of Letizia Battaglia.",
+      "url": "https://www.grandtourworld.it/"
+    },
+    {
+      "id": "matthew-18-6-10",
+      "title": "Matthew 18:6.10",
+      "bookAuthor": "Wally Dall’Asta",
+      "publisherId": "kimerik",
+      "cover": "covers/2862_WallyCopertina_fronte - Pia Kimerik.jpg",
+      "summary": "Fiction title from Casa Editrice Kimerik (series Percorsi — Narrativa). Kimerik’s showcase highlights immersive novels with rich character arcs, vivid settings and thought-provoking plots ranging from contemporary drama to historical narratives, selected for high artistic quality and international appeal.",
+      "url": "https://www.kimerik.it/"
+    }
+  ]
+}

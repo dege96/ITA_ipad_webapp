@@ -1,0 +1,15 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian Trade Agency//Katalog//SV
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:salone-2027@catalogo-bokmassan.vercel.app
+DTSTAMP:20260901T120000Z
+DTSTART;VALUE=DATE:20270513
+DTEND;VALUE=DATE:20270518
+SUMMARY:Salone Internazionale del Libro
+LOCATION:Torino (Lingotto Fiere)
+DESCRIPTION:Salone Internazionale del Libro — italiensk mässa i samarbete med Italian Trade Agency.
+END:VEVENT
+END:VCALENDAR

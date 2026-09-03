@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="sv">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Katalog" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="description" content="Digital katalog för italienska förlag på Göteborgs Bokmässa." />
+    <title>Katalog — Italienska förlag</title>
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="apple-touch-icon" href="./public/icons/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="./public/icons/icon-192.png" />
+    <link rel="preload" href="./css/fonts/poppins-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="./css/fonts/poppins-600.woff2" as="font" type="font/woff2" crossorigin />
+    <link
+      rel="preload"
+      as="image"
+      href="./public/logos/ITA-logo/ita-100-welcome.png"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="./public/logos/ITA-logo/ita-100-header.png"
+    />
+    <link rel="stylesheet" href="./css/styles.css" />
+  </head>
+  <body>
+    <div id="app" class="is-welcome">
+      <header class="topbar">
+        <button type="button" id="btn-home" class="topbar-home" aria-label="Till välkomstskärm">
+          <svg class="topbar-home-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              fill="currentColor"
+              d="M12 3.15 3.45 10.4a.95.95 0 0 0 .62 1.7h.93V20c0 .5.4.9.9.9h4.2v-5.35h4v5.35h4.2c.5 0 .9-.4.9-.9v-7.9h.93a.95.95 0 0 0 .62-1.7L12 3.15Z"
+            />
+          </svg>
+        </button>
+        <img
+          class="topbar-logo"
+          src="./public/logos/ITA-logo/ita-100-header.png"
+          alt="Italian Trade Agency, 1926–2026"
+          draggable="false"
+        />
+        <div class="topbar-actions">
+          <button
+            type="button"
+            id="btn-publishers"
+            class="btn btn-filter"
+            aria-haspopup="true"
+            aria-expanded="false"
+            aria-controls="view-publishers"
+          >
+            <svg class="btn-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                fill="currentColor"
+                d="M4.25 5.5h15.5a.75.75 0 0 1 .56 1.25L14 13.06V18a.75.75 0 0 1-.4.66l-3 1.5A.75.75 0 0 1 9.5 19.5v-6.44L3.69 6.75A.75.75 0 0 1 4.25 5.5Z"
+              />
+            </svg>
+            <span>Filter</span>
+          </button>
+        </div>
+      </header>
+
+      <main class="stage">
+        <section id="view-welcome" class="view is-active" aria-label="Välkommen">
+          <div class="welcome-content">
+            <div class="welcome-brand">
+              <img
+                class="welcome-logo"
+                src="./public/logos/ITA-logo/ita-100-welcome.png"
+                alt="Italian Trade Agency, 1926–2026. A century of promoting Made in Italy worldwide."
+                draggable="false"
+              />
+              <span class="welcome-rule" aria-hidden="true"></span>
+            </div>
+            <div class="welcome-actions">
+              <button type="button" id="btn-about" class="btn-welcome">Om ITA Agency</button>
+              <button type="button" id="btn-books" class="btn-welcome">Urval av Italienska Titlar</button>
+              <button type="button" id="btn-calendar" class="btn-welcome">Hitta Rätt Bokmässa i Italien</button>
+              <button type="button" id="btn-nib" class="btn-welcome btn-welcome-logo" aria-label="New Italian Books sida">
+                <img
+                  src="./public/events/logo-newitalianbooks.webp"
+                  alt=""
+                  class="btn-welcome-img"
+                  draggable="false"
+                />
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section id="view-catalog" class="view" aria-hidden="true" aria-label="Katalog">
+          <div id="filter-bar" class="filter-bar" hidden>
+            <img id="filter-logo" class="filter-logo" alt="" />
+            <p id="filter-name" class="filter-name"></p>
+            <button type="button" id="btn-clear-filter" class="filter-clear" aria-label="Visa alla titlar">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  fill="currentColor"
+                  d="M6.3 6.3a1 1 0 0 1 1.4 0L12 10.58l4.3-4.28a1 1 0 1 1 1.4 1.42L13.42 12l4.28 4.3a1 1 0 0 1-1.42 1.4L12 13.42l-4.3 4.28a1 1 0 0 1-1.4-1.42L10.58 12 6.3 7.7a1 1 0 0 1 0-1.4Z"
+                />
+              </svg>
+            </button>
+          </div>
+          <div id="book-grid" class="book-grid"></div>
+        </section>
+
+        <section id="view-publishers" class="view" aria-hidden="true" aria-label="Filtrera på förlag">
+          <div class="view-toolbar">
+            <button type="button" id="btn-back-publishers" class="btn btn-ghost">Tillbaka</button>
+            <h1 class="view-heading">Välj förlag</h1>
+          </div>
+          <p class="view-lead">Visa titlar från ett förlag.</p>
+          <div id="publisher-grid" class="publisher-grid"></div>
+        </section>
+
+        <section id="view-book" class="view" aria-hidden="true" aria-label="Bokdetalj">
+          <div class="view-toolbar">
+            <button type="button" id="btn-back-book" class="btn btn-ghost">Tillbaka</button>
+          </div>
+          <div class="detail-body">
+            <div class="detail-cover-col">
+              <img id="detail-cover" class="detail-cover" alt="" draggable="false" />
+            </div>
+            <div class="detail-info">
+              <p id="detail-publisher" class="detail-kicker"></p>
+              <h1 id="detail-title" class="detail-title"></h1>
+              <p id="detail-author" class="detail-author"></p>
+              <p id="detail-summary" class="detail-summary"></p>
+              <div class="qr-block">
+                <div id="qr" class="qr" aria-hidden="true"></div>
+                <p class="qr-caption">Skanna QR-koden för mer information på din egen enhet</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="view-calendar" class="view" aria-hidden="true" aria-label="Kalender">
+          <div class="view-toolbar">
+            <h1 class="view-heading">Kalender</h1>
+          </div>
+          <p class="view-lead">Italienska mässor i samarbete med ITA.</p>
+          <article id="calendar-content" class="about-content"></article>
+        </section>
+
+        <section id="view-fair" class="view" aria-hidden="true" aria-label="Mässa">
+          <div class="view-toolbar">
+            <button type="button" id="btn-back-fair" class="btn btn-ghost">Tillbaka</button>
+          </div>
+          <p id="fair-meta" class="view-lead"></p>
+          <article id="fair-content" class="about-content fair-content"></article>
+          <div id="fair-qr-wrap" class="fair-qr-wrap" hidden>
+            <div class="qr-block">
+              <div id="fair-qr" class="qr" aria-hidden="true"></div>
+              <p class="qr-caption">Skanna QR-koden för att veta mer om mässan</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="view-about" class="view" aria-hidden="true" aria-label="Om oss">
+          <div class="view-toolbar">
+            <h1 class="view-heading">Om oss</h1>
+          </div>
+          <p class="view-lead">Italian Trade Agency och hur du når oss.</p>
+          <article id="about-content" class="about-content"></article>
+        </section>
+
+        <section id="view-nib" class="view" aria-hidden="true" aria-label="New Italian Books">
+          <div class="view-toolbar">
+            <h1 class="view-heading">New Italian Books</h1>
+          </div>
+          <article id="nib-content" class="about-content"></article>
+          <div class="fair-qr-wrap">
+            <div class="qr-block">
+              <div id="nib-qr" class="qr" aria-hidden="true"></div>
+              <p class="qr-caption">Skanna QR-koden för att besöka newitalianbooks.it</p>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="boot" class="boot" aria-live="polite">
+      <p class="boot-mark">Katalog</p>
+      <p class="boot-sub">Italienska förlag</p>
+      <p id="boot-status" class="boot-status">Öppnar katalogen…</p>
+    </div>
+
+    <noscript>
+      <p class="noscript">JavaScript krävs för att visa katalogen.</p>
+    </noscript>
+
+    <script src="./js/qrcode.min.js"></script>
+    <script src="./js/sw-register.js"></script>
+    <script src="./js/app.js"></script>
+  </body>
+</html>
