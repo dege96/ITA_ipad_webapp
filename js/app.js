@@ -18,17 +18,22 @@
       publishersLabel: "Filtrera på förlag",
       back: "Tillbaka",
       choosePublisher: "Välj förlag",
-      choosePublisherLead: "Visa titlar från ett förlag.",
+      choosePublisherLead: "Tryck på ett förlag för att visa deras titlar.",
+      publishersKicker: "Katalog",
       bookLabel: "Bokdetalj",
       bookQrCaption: "Skanna QR-koden för mer information på din egen enhet",
       calendarLabel: "Kalender",
-      calendarHeading: "Kalender",
-      calendarLead: "Italienska mässor i samarbete med ITA.",
+      calendarKicker: "Evenemang",
+      calendarHeading: "Bokmässor i Italien",
+      calendarLead: "Tryck på en mässa för datum, plats och mer information.",
       fairLabel: "Mässa",
       fairQrCaption: "Skanna QR-koden för att veta mer om mässan",
       aboutLabel: "Om oss",
-      aboutHeading: "Om oss",
-      aboutLead: "Italian Trade Agency och hur du når oss.",
+      aboutKicker: "Italian Trade Agency",
+      aboutHeading: "Om ITA",
+      aboutLead: "Vårt uppdrag inom förlagssektorn — och hur du når kontoret i Stockholm.",
+      nibKicker: "Online",
+      nibLead: "Upptäck italiensk litteratur digitalt — skanna QR-koden för att öppna webbplatsen.",
       nibQrCaption: "Skanna QR-koden för att besöka newitalianbooks.it",
       bootMark: "Katalog",
       bootSub: "Italienska förlag",
@@ -54,17 +59,22 @@
       publishersLabel: "Filter by publisher",
       back: "Back",
       choosePublisher: "Choose publisher",
-      choosePublisherLead: "Show titles from one publisher.",
+      choosePublisherLead: "Tap a publisher to show their titles.",
+      publishersKicker: "Catalogue",
       bookLabel: "Book detail",
       bookQrCaption: "Scan the QR code for more information on your own device",
       calendarLabel: "Calendar",
-      calendarHeading: "Calendar",
-      calendarLead: "Italian book fairs in cooperation with ITA.",
+      calendarKicker: "Events",
+      calendarHeading: "Book fairs in Italy",
+      calendarLead: "Tap a fair for dates, venue and more information.",
       fairLabel: "Book fair",
       fairQrCaption: "Scan the QR code to learn more about the fair",
       aboutLabel: "About us",
-      aboutHeading: "About us",
-      aboutLead: "Italian Trade Agency and how to reach us.",
+      aboutKicker: "Italian Trade Agency",
+      aboutHeading: "About ITA",
+      aboutLead: "Our role in publishing — and how to reach the Stockholm office.",
+      nibKicker: "Online",
+      nibLead: "Discover Italian literature online — scan the QR code to open the website.",
       nibQrCaption: "Scan the QR code to visit newitalianbooks.it",
       bootMark: "Catalogue",
       bootSub: "Italian publishers",
@@ -603,12 +613,26 @@
     });
   }
 
-  async function loadMarkdown(url, target) {
+  function enhanceAboutHtml(html) {
+    const match = /<h2>(Kontakt|Contact)<\/h2>/i.exec(html);
+    if (!match) return `<div class="about-body">${html}</div>`;
+    const idx = html.indexOf(match[0]);
+    const body = html.slice(0, idx).trim();
+    const contact = html.slice(idx).trim();
+    return (
+      `<div class="about-body">${body}</div>` +
+      `<aside class="contact-panel" aria-label="${escapeHtml(match[1])}">${contact}</aside>`
+    );
+  }
+
+  async function loadMarkdown(url, target, enhance) {
     try {
       const response = await fetch(url, { cache: "no-cache" });
       if (!response.ok) throw new Error(`Kunde inte läsa ${url}.`);
       const markdown = await response.text();
-      target.innerHTML = markdownToHtml(markdown);
+      let html = markdownToHtml(markdown);
+      if (typeof enhance === "function") html = enhance(html);
+      target.innerHTML = html;
     } catch (error) {
       target.innerHTML = `<p class="empty-state">${escapeHtml(t("loadError"))}</p>`;
       console.error(error);
@@ -616,7 +640,7 @@
   }
 
   function loadAbout() {
-    return loadMarkdown(contentUrls().about, els.aboutContent);
+    return loadMarkdown(contentUrls().about, els.aboutContent, enhanceAboutHtml);
   }
 
   function loadNib() {

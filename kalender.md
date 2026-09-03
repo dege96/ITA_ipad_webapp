@@ -13,8 +13,6 @@ Format (Markdown):
 Efter publicering: bumpa CACHE_NAME i sw.js så iPaderna hämtar den nya texten.
 -->
 
-Datum och plats uppdateras löpande.
-
 | Mässa | Datum | Plats |
 | --- | --- | --- |
 | [![Più libri più liberi](./public/events/piulibri_logo.svg)](#fair-piu-libri) | 4–8 december 2026 | Rom (La Nuvola) |

@@ -14,15 +14,17 @@ Format (Markdown):
 Efter publicering: bumpa CACHE_NAME i sw.js så iPaderna hämtar den nya texten.
 -->
 
-## Italian Trade Agency
+## Vad vi gör
 
-Italian Trade Agency (ITA) är Italiens statliga myndighet för handelsfrämjande och internationell affärsutveckling. Genom ett globalt nätverk av kontor arbetar ITA för att stärka italienska företags närvaro på internationella marknader och främja internationella affärsrelationer.
+Italian Trade Agency (ITA) är Italiens myndighet för handelsfrämjande och internationell affärsutveckling. Genom ett globalt nätverk av kontor stärker vi italienska företags närvaro på världsmarknaden.
 
-ITA erbjuder information, marknadsanalys, rådgivning, affärskontakter, B2B-möten och stöd vid internationell expansion. Myndigheten främjar även italiensk närvaro på internationella mässor och andra branschevenemang.
+Inom förlagssektorn arbetar vi för att italiensk litteratur ska nå fler läsare och förlag — via mässor, branschmöten, marknadsföring och affärsmatchning.
 
-Inom förlagssektorn arbetar ITA för att öka den internationella spridningen av italiensk litteratur och skapa nya kontakter mellan italienska förlag och internationella aktörer. Genom mässor, branschaktiviteter, marknadsföring och affärsmatchning bidrar ITA till att italienska titlar och författarskap når nya marknader.
+För dig som arbetar med böcker i Norden betyder det möjligheter att:
 
-För nordiska förlag och aktörer inom bokbranschen erbjuder ITA möjligheter att upptäcka italienska titlar, hitta relevanta förlag och skapa nya internationella affärskontakter.
+- upptäcka italienska titlar
+- hitta relevanta förlag
+- skapa nya internationella affärskontakter
 
 ## Kontakt
 
@@ -32,5 +34,8 @@ Italienska ambassadens sektion för handelsutbyte
 Korta gatan 7, 8th floor  
 171 54 Stockholm
 
-Tel: [0046/8248960](tel:+468248960)  
-E-post: [stoccolma@ice.it](mailto:stoccolma@ice.it)
+**Telefon**  
+[08-248 960](tel:+468248960)
+
+**E-post**  
+[stoccolma@ice.it](mailto:stoccolma@ice.it)

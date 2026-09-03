@@ -132,11 +132,14 @@
         </section>
 
         <section id="view-publishers" class="view" aria-hidden="true" data-i18n-aria-label="publishersLabel" aria-label="Filtrera på förlag">
-          <div class="view-toolbar">
-            <button type="button" id="btn-back-publishers" class="btn btn-ghost" data-i18n="back">Tillbaka</button>
+          <header class="view-intro view-intro--wide">
+            <div class="view-toolbar">
+              <button type="button" id="btn-back-publishers" class="btn btn-ghost" data-i18n="back">Tillbaka</button>
+            </div>
+            <p class="view-kicker" data-i18n="publishersKicker">Katalog</p>
             <h1 class="view-heading" data-i18n="choosePublisher">Välj förlag</h1>
-          </div>
-          <p class="view-lead" data-i18n="choosePublisherLead">Visa titlar från ett förlag.</p>
+            <p class="view-lead" data-i18n="choosePublisherLead">Tryck på ett förlag för att visa deras titlar.</p>
+          </header>
           <div id="publisher-grid" class="publisher-grid"></div>
         </section>
 
@@ -162,10 +165,11 @@
         </section>
 
         <section id="view-calendar" class="view" aria-hidden="true" data-i18n-aria-label="calendarLabel" aria-label="Kalender">
-          <div class="view-toolbar">
-            <h1 class="view-heading" data-i18n="calendarHeading">Kalender</h1>
-          </div>
-          <p class="view-lead" data-i18n="calendarLead">Italienska mässor i samarbete med ITA.</p>
+          <header class="view-intro view-intro--wide">
+            <p class="view-kicker" data-i18n="calendarKicker">Evenemang</p>
+            <h1 class="view-heading" data-i18n="calendarHeading">Bokmässor i Italien</h1>
+            <p class="view-lead" data-i18n="calendarLead">Tryck på en mässa för datum, plats och mer information.</p>
+          </header>
           <article id="calendar-content" class="about-content"></article>
         </section>
 
@@ -184,17 +188,20 @@
         </section>
 
         <section id="view-about" class="view" aria-hidden="true" data-i18n-aria-label="aboutLabel" aria-label="Om oss">
-          <div class="view-toolbar">
-            <h1 class="view-heading" data-i18n="aboutHeading">Om oss</h1>
-          </div>
-          <p class="view-lead" data-i18n="aboutLead">Italian Trade Agency och hur du når oss.</p>
-          <article id="about-content" class="about-content"></article>
+          <header class="view-intro">
+            <p class="view-kicker" data-i18n="aboutKicker">Italian Trade Agency</p>
+            <h1 class="view-heading" data-i18n="aboutHeading">Om ITA</h1>
+            <p class="view-lead" data-i18n="aboutLead">Vårt uppdrag inom förlagssektorn — och hur du når kontoret i Stockholm.</p>
+          </header>
+          <article id="about-content" class="about-content about-layout"></article>
         </section>
 
         <section id="view-nib" class="view" aria-hidden="true" aria-label="New Italian Books">
-          <div class="view-toolbar">
+          <header class="view-intro">
+            <p class="view-kicker" data-i18n="nibKicker">Online</p>
             <h1 class="view-heading">New Italian Books</h1>
-          </div>
+            <p class="view-lead" data-i18n="nibLead">Upptäck italiensk litteratur digitalt — skanna QR-koden för att öppna webbplatsen.</p>
+          </header>
           <article id="nib-content" class="about-content"></article>
           <div class="fair-qr-wrap">
             <div class="qr-block">
