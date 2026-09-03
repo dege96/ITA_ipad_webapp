@@ -4,6 +4,6 @@ New Italian Books — redigera den här filen. Innehållet visas i appen under l
 Efter publicering: bumpa CACHE_NAME i sw.js så iPaderna hämtar den nya texten.
 -->
 
-## Promotion of Italian book publishing worldwide
+## Främjande av italiensk bokutgivning världen över
 
-**newitalianbooks** is a site that promotes Italian publishing, language and culture globally. It is a trilingual website aimed at Italian and foreign publishers, literary agents, translators, Italianists, Italian cultural institutes, Italians abroad, and all literature lovers.
+**newitalianbooks** är en webbplats som främjar italiensk förlagsverksamhet, språk och kultur globalt. Det är en trespråkig webbplats riktad till italienska och utländska förlag, litterära agenter, översättare, italianister, italienska kulturinstitut, italienare utomlands och alla litteraturälskare.

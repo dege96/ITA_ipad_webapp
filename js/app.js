@@ -1,14 +1,105 @@
 (() => {
   const IDLE_TIMEOUT = 60_000;
   const CATALOG_URL = "./public/catalog.json";
-  const ABOUT_URL = "./om-oss.md";
-  const CALENDAR_URL = "./kalender.md";
-  const NIB_URL = "./newitalianbooks.md";
   const NIB_SITE_URL = "https://www.newitalianbooks.it/";
-  const FAIR_PAGES = {
-    bologna: "./massor/bologna.md",
-    "piu-libri": "./massor/piu-libri.md",
-    salone: "./massor/salone.md",
+  const LANG_KEY = "ita-katalog-lang";
+
+  const STRINGS = {
+    sv: {
+      homeAria: "Till välkomstskärm",
+      filter: "Filter",
+      welcomeLabel: "Välkommen",
+      aboutBtn: "Om ITA Agency",
+      booksBtn: "Urval av Italienska Titlar",
+      calendarBtn: "Hitta Rätt Bokmässa i Italien",
+      nibAria: "New Italian Books sida",
+      catalogLabel: "Katalog",
+      clearFilterAria: "Visa alla titlar",
+      publishersLabel: "Filtrera på förlag",
+      back: "Tillbaka",
+      choosePublisher: "Välj förlag",
+      choosePublisherLead: "Visa titlar från ett förlag.",
+      bookLabel: "Bokdetalj",
+      bookQrCaption: "Skanna QR-koden för mer information på din egen enhet",
+      calendarLabel: "Kalender",
+      calendarHeading: "Kalender",
+      calendarLead: "Italienska mässor i samarbete med ITA.",
+      fairLabel: "Mässa",
+      fairQrCaption: "Skanna QR-koden för att veta mer om mässan",
+      aboutLabel: "Om oss",
+      aboutHeading: "Om oss",
+      aboutLead: "Italian Trade Agency och hur du når oss.",
+      nibQrCaption: "Skanna QR-koden för att besöka newitalianbooks.it",
+      bootMark: "Katalog",
+      bootSub: "Italienska förlag",
+      bootStatus: "Öppnar katalogen…",
+      bootError: "Katalogen kunde inte laddas. Kontrollera anslutningen och försök igen.",
+      emptyBooks: "Inga titlar att visa.",
+      allTitles: "Alla titlar",
+      loadError: "Informationen kunde inte laddas just nu.",
+      calendarLoadError: "Kunde inte ladda kalendern.",
+      pageTitle: "Katalog — Italienska förlag",
+      pageDescription: "Digital katalog för italienska förlag på Göteborgs Bokmässa.",
+    },
+    en: {
+      homeAria: "Back to welcome screen",
+      filter: "Filter",
+      welcomeLabel: "Welcome",
+      aboutBtn: "About ITA Agency",
+      booksBtn: "Selection of Italian Titles",
+      calendarBtn: "Find the Right Book Fair in Italy",
+      nibAria: "New Italian Books page",
+      catalogLabel: "Catalogue",
+      clearFilterAria: "Show all titles",
+      publishersLabel: "Filter by publisher",
+      back: "Back",
+      choosePublisher: "Choose publisher",
+      choosePublisherLead: "Show titles from one publisher.",
+      bookLabel: "Book detail",
+      bookQrCaption: "Scan the QR code for more information on your own device",
+      calendarLabel: "Calendar",
+      calendarHeading: "Calendar",
+      calendarLead: "Italian book fairs in cooperation with ITA.",
+      fairLabel: "Book fair",
+      fairQrCaption: "Scan the QR code to learn more about the fair",
+      aboutLabel: "About us",
+      aboutHeading: "About us",
+      aboutLead: "Italian Trade Agency and how to reach us.",
+      nibQrCaption: "Scan the QR code to visit newitalianbooks.it",
+      bootMark: "Catalogue",
+      bootSub: "Italian publishers",
+      bootStatus: "Opening the catalogue…",
+      bootError: "The catalogue could not be loaded. Check your connection and try again.",
+      emptyBooks: "No titles to show.",
+      allTitles: "All titles",
+      loadError: "The information could not be loaded right now.",
+      calendarLoadError: "Could not load the calendar.",
+      pageTitle: "Catalogue — Italian publishers",
+      pageDescription: "Digital catalogue for Italian publishers at the Göteborg Book Fair.",
+    },
+  };
+
+  const CONTENT = {
+    sv: {
+      about: "./om-oss.md",
+      calendar: "./kalender.md",
+      nib: "./newitalianbooks.md",
+      fairs: {
+        bologna: "./massor/bologna.md",
+        "piu-libri": "./massor/piu-libri.md",
+        salone: "./massor/salone.md",
+      },
+    },
+    en: {
+      about: "./en/om-oss.md",
+      calendar: "./en/kalender.md",
+      nib: "./en/newitalianbooks.md",
+      fairs: {
+        bologna: "./en/massor/bologna.md",
+        "piu-libri": "./en/massor/piu-libri.md",
+        salone: "./en/massor/salone.md",
+      },
+    },
   };
 
   const els = {
@@ -25,6 +116,8 @@
     btnBackPublishers: document.getElementById("btn-back-publishers"),
     btnBackBook: document.getElementById("btn-back-book"),
     btnBackFair: document.getElementById("btn-back-fair"),
+    btnLangSv: document.getElementById("btn-lang-sv"),
+    btnLangEn: document.getElementById("btn-lang-en"),
     viewWelcome: document.getElementById("view-welcome"),
     viewCatalog: document.getElementById("view-catalog"),
     viewPublishers: document.getElementById("view-publishers"),
@@ -69,6 +162,43 @@
   let selectedPublisherId = null;
   let idleTimer = null;
   let qrInstance = null;
+  let lang = "sv";
+  let currentView = "welcome";
+  let currentFairId = null;
+  let currentBookId = null;
+
+  function t(key) {
+    return (STRINGS[lang] && STRINGS[lang][key]) || STRINGS.sv[key] || key;
+  }
+
+  function contentUrls() {
+    return CONTENT[lang] || CONTENT.sv;
+  }
+
+  function applyStaticTranslations() {
+    document.documentElement.lang = lang;
+    document.title = t("pageTitle");
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.setAttribute("content", t("pageDescription"));
+
+    document.querySelectorAll("[data-i18n]").forEach((node) => {
+      const key = node.getAttribute("data-i18n");
+      if (key) node.textContent = t(key);
+    });
+    document.querySelectorAll("[data-i18n-aria]").forEach((node) => {
+      const key = node.getAttribute("data-i18n-aria");
+      if (key) node.setAttribute("aria-label", t(key));
+    });
+    document.querySelectorAll("[data-i18n-aria-label]").forEach((node) => {
+      const key = node.getAttribute("data-i18n-aria-label");
+      if (key) node.setAttribute("aria-label", t(key));
+    });
+
+    els.btnLangSv.classList.toggle("is-active", lang === "sv");
+    els.btnLangEn.classList.toggle("is-active", lang === "en");
+    els.btnLangSv.setAttribute("aria-pressed", lang === "sv" ? "true" : "false");
+    els.btnLangEn.setAttribute("aria-pressed", lang === "en" ? "true" : "false");
+  }
 
   function publicUrl(rel) {
     return "./public/" + String(rel).split("/").map(encodeURIComponent).join("/");
@@ -239,8 +369,21 @@
     return { meta, html: markdownToHtml(text) };
   }
 
-  function fairIcsUrl(id) {
-    return new URL(`./public/ics/${encodeURIComponent(id)}.ics`, window.location.href).href;
+  function fairPageUrl(id) {
+    const url = new URL(window.location.href);
+    url.search = "";
+    url.hash = `fair-${id}`;
+    return url.href;
+  }
+
+  function setFairHash(id) {
+    const next = id ? `#fair-${id}` : "";
+    if (window.location.hash === next) return;
+    if (id) {
+      history.replaceState(null, "", `#fair-${id}`);
+    } else if (window.location.hash) {
+      history.replaceState(null, "", window.location.pathname + window.location.search);
+    }
   }
 
   function publisherById(id) {
@@ -257,6 +400,7 @@
   }
 
   function showView(name) {
+    currentView = name;
     Object.entries(views).forEach(([key, node]) => {
       const active = key === name;
       node.classList.toggle("is-active", active);
@@ -267,6 +411,10 @@
     els.btnPublishers.classList.toggle("is-open", pickerOpen);
     els.btnPublishers.setAttribute("aria-expanded", pickerOpen ? "true" : "false");
     els.btnPublishers.hidden = name !== "catalog" && name !== "publishers";
+    if (name !== "fair") {
+      currentFairId = null;
+      setFairHash(null);
+    }
   }
 
   function updateFilterBar() {
@@ -284,7 +432,7 @@
   function renderCatalog() {
     const books = visibleBooks();
     if (!books.length) {
-      els.bookGrid.innerHTML = '<p class="empty-state">Inga titlar att visa.</p>';
+      els.bookGrid.innerHTML = `<p class="empty-state">${escapeHtml(t("emptyBooks"))}</p>`;
       return;
     }
 
@@ -308,7 +456,7 @@
   function renderPublishers() {
     const allCard = `
       <button class="publisher-card publisher-card-all${!selectedPublisherId ? " is-selected" : ""}" type="button" data-publisher-id="all">
-        <span class="publisher-name">Alla titlar</span>
+        <span class="publisher-name">${escapeHtml(t("allTitles"))}</span>
       </button>
     `;
 
@@ -349,6 +497,7 @@
   }
 
   function clearFairView() {
+    currentFairId = null;
     els.fairMeta.textContent = "";
     els.fairMeta.hidden = true;
     els.fairContent.innerHTML = "";
@@ -358,10 +507,10 @@
   }
 
   function showFairUnavailable() {
+    currentFairId = null;
     els.fairMeta.textContent = "";
     els.fairMeta.hidden = true;
-    els.fairContent.innerHTML =
-      '<p class="empty-state">Informationen kunde inte laddas just nu.</p>';
+    els.fairContent.innerHTML = `<p class="empty-state">${escapeHtml(t("loadError"))}</p>`;
     els.fairQr.innerHTML = "";
     els.fairQrWrap.hidden = true;
     showView("fair");
@@ -369,7 +518,7 @@
   }
 
   async function openFair(id) {
-    const url = FAIR_PAGES[id];
+    const url = contentUrls().fairs[id];
     if (!url) {
       showFairUnavailable();
       return;
@@ -380,17 +529,14 @@
       const markdown = await response.text();
       const { meta, html } = parseFairSource(markdown);
       const metaLine = [meta.dates, meta.location].filter(Boolean).join(" · ");
+      currentFairId = id;
       els.fairMeta.textContent = metaLine;
       els.fairMeta.hidden = !metaLine;
-      els.fairContent.innerHTML = html || '<p class="empty-state">Informationen kunde inte laddas just nu.</p>';
-      if (meta.start && meta.end) {
-        els.fairQrWrap.hidden = false;
-        renderQR(fairIcsUrl(id), els.fairQr);
-      } else {
-        els.fairQr.innerHTML = "";
-        els.fairQrWrap.hidden = true;
-      }
+      els.fairContent.innerHTML = html || `<p class="empty-state">${escapeHtml(t("loadError"))}</p>`;
+      els.fairQrWrap.hidden = false;
+      renderQR(fairPageUrl(id), els.fairQr);
       showView("fair");
+      setFairHash(id);
       els.fairContent.scrollTop = 0;
     } catch (error) {
       console.error(error);
@@ -402,6 +548,7 @@
     const book = bookById(id);
     if (!book) return;
     const publisher = publisherById(book.publisherId);
+    currentBookId = id;
     els.detailCover.src = publicUrl(book.cover);
     els.detailCover.alt = book.title;
     els.detailPublisher.textContent = publisher ? publisher.name : "";
@@ -426,6 +573,7 @@
 
   function resetToHome() {
     selectedPublisherId = null;
+    currentBookId = null;
     updateFilterBar();
     renderPublishers();
     renderCatalog();
@@ -434,6 +582,7 @@
     els.aboutContent.scrollTop = 0;
     els.nibContent.scrollTop = 0;
     clearFairView();
+    setFairHash(null);
     showView("welcome");
     els.qr.innerHTML = "";
   }
@@ -452,6 +601,69 @@
       const img = new Image();
       img.src = url;
     });
+  }
+
+  async function loadMarkdown(url, target) {
+    try {
+      const response = await fetch(url, { cache: "no-cache" });
+      if (!response.ok) throw new Error(`Kunde inte läsa ${url}.`);
+      const markdown = await response.text();
+      target.innerHTML = markdownToHtml(markdown);
+    } catch (error) {
+      target.innerHTML = `<p class="empty-state">${escapeHtml(t("loadError"))}</p>`;
+      console.error(error);
+    }
+  }
+
+  function loadAbout() {
+    return loadMarkdown(contentUrls().about, els.aboutContent);
+  }
+
+  function loadNib() {
+    return loadMarkdown(contentUrls().nib, els.nibContent);
+  }
+
+  function enhanceCalendar(root) {
+    root.querySelectorAll("tbody tr").forEach((row) => {
+      const link = row.querySelector('a[href^="#fair-"]');
+      if (!link) return;
+      const fairMatch = /^#fair-([a-z0-9-]+)$/i.exec(link.getAttribute("href") || "");
+      if (fairMatch) row.dataset.fairId = fairMatch[1].toLowerCase();
+    });
+  }
+
+  async function loadCalendar() {
+    try {
+      const response = await fetch(contentUrls().calendar, { cache: "no-cache" });
+      if (!response.ok) throw new Error(`Kunde inte läsa kalendern.`);
+      const markdown = await response.text();
+      els.calendarContent.innerHTML = markdownToHtml(markdown);
+      enhanceCalendar(els.calendarContent);
+    } catch (error) {
+      els.calendarContent.innerHTML = `<p>${escapeHtml(t("calendarLoadError"))}</p>`;
+      console.error(error);
+    }
+  }
+
+  async function setLanguage(nextLang) {
+    if (!STRINGS[nextLang] || nextLang === lang) return;
+    lang = nextLang;
+    try {
+      localStorage.setItem(LANG_KEY, lang);
+    } catch (_) {
+      /* ignore */
+    }
+    applyStaticTranslations();
+    renderPublishers();
+    renderCatalog();
+    await Promise.all([loadAbout(), loadCalendar(), loadNib()]);
+    if (currentView === "fair" && currentFairId) {
+      await openFair(currentFairId);
+    } else if (currentView === "book" && currentBookId) {
+      openBook(currentBookId);
+    } else if (currentView === "nib") {
+      renderQR(NIB_SITE_URL, els.nibQr);
+    }
   }
 
   function bindEvents() {
@@ -492,8 +704,13 @@
       showView("catalog");
     });
     els.btnBackFair.addEventListener("click", () => {
+      clearFairView();
+      setFairHash(null);
       showView("calendar");
     });
+
+    els.btnLangSv.addEventListener("click", () => setLanguage("sv"));
+    els.btnLangEn.addEventListener("click", () => setLanguage("en"));
 
     document.addEventListener(
       "click",
@@ -560,50 +777,24 @@
     return data;
   }
 
-  async function loadMarkdown(url, target) {
+  function readStoredLang() {
     try {
-      const response = await fetch(url, { cache: "no-cache" });
-      if (!response.ok) throw new Error(`Kunde inte läsa ${url}.`);
-      const markdown = await response.text();
-      target.innerHTML = markdownToHtml(markdown);
-    } catch (error) {
-      target.innerHTML =
-        '<p class="empty-state">Informationen kunde inte laddas just nu.</p>';
-      console.error(error);
+      const stored = localStorage.getItem(LANG_KEY);
+      if (stored === "en" || stored === "sv") return stored;
+    } catch (_) {
+      /* ignore */
     }
+    return "sv";
   }
 
-  function loadAbout() {
-    return loadMarkdown(ABOUT_URL, els.aboutContent);
-  }
-
-  function loadNib() {
-    return loadMarkdown(NIB_URL, els.nibContent);
-  }
-
-  function enhanceCalendar(root) {
-    root.querySelectorAll("tbody tr").forEach((row) => {
-      const link = row.querySelector('a[href^="#fair-"]');
-      if (!link) return;
-      const fairMatch = /^#fair-([a-z0-9-]+)$/i.exec(link.getAttribute("href") || "");
-      if (fairMatch) row.dataset.fairId = fairMatch[1].toLowerCase();
-    });
-  }
-
-  async function loadCalendar() {
-    try {
-      const response = await fetch(CALENDAR_URL, { cache: "no-cache" });
-      if (!response.ok) throw new Error(`Kunde inte läsa ${CALENDAR_URL}.`);
-      const markdown = await response.text();
-      els.calendarContent.innerHTML = markdownToHtml(markdown);
-      enhanceCalendar(els.calendarContent);
-    } catch (error) {
-      els.calendarContent.innerHTML = "<p>Kunde inte ladda kalendern.</p>";
-      console.error(error);
-    }
+  function fairIdFromHash() {
+    const match = /^#fair-([a-z0-9-]+)$/i.exec(window.location.hash || "");
+    return match ? match[1].toLowerCase() : null;
   }
 
   async function init() {
+    lang = readStoredLang();
+    applyStaticTranslations();
     bindEvents();
     resetIdleTimer();
     try {
@@ -612,16 +803,18 @@
       renderCatalog();
       updateFilterBar();
       precacheAssets();
-      loadAbout();
-      loadCalendar();
-      loadNib();
-      showView("welcome");
+      await Promise.all([loadAbout(), loadCalendar(), loadNib()]);
+      const deepFair = fairIdFromHash();
+      if (deepFair && contentUrls().fairs[deepFair]) {
+        await openFair(deepFair);
+      } else {
+        showView("welcome");
+      }
       els.boot.classList.add("is-done");
       els.boot.setAttribute("aria-hidden", "true");
     } catch (error) {
       els.boot.classList.add("is-error");
-      els.bootStatus.textContent =
-        "Katalogen kunde inte laddas. Kontrollera anslutningen och försök igen.";
+      els.bootStatus.textContent = t("bootError");
       console.error(error);
     }
   }

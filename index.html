@@ -33,8 +33,27 @@
   </head>
   <body>
     <div id="app" class="is-welcome">
+      <div class="lang-switcher" role="group" aria-label="Language">
+        <button type="button" id="btn-lang-sv" class="lang-btn is-active" data-lang="sv" aria-label="Svenska" aria-pressed="true">
+          <svg class="lang-flag" viewBox="0 0 16 10" aria-hidden="true">
+            <rect width="16" height="10" fill="#006AA7" />
+            <rect x="5" width="2" height="10" fill="#FECC00" />
+            <rect y="4" width="16" height="2" fill="#FECC00" />
+          </svg>
+        </button>
+        <button type="button" id="btn-lang-en" class="lang-btn" data-lang="en" aria-label="English" aria-pressed="false">
+          <svg class="lang-flag" viewBox="0 0 60 30" aria-hidden="true">
+            <rect width="60" height="30" fill="#012169" />
+            <path d="M0 0 L60 30 M60 0 L0 30" stroke="#fff" stroke-width="6" />
+            <path d="M0 0 L60 30 M60 0 L0 30" stroke="#C8102E" stroke-width="4" />
+            <path d="M30 0 V30 M0 15 H60" stroke="#fff" stroke-width="10" />
+            <path d="M30 0 V30 M0 15 H60" stroke="#C8102E" stroke-width="6" />
+          </svg>
+        </button>
+      </div>
+
       <header class="topbar">
-        <button type="button" id="btn-home" class="topbar-home" aria-label="Till välkomstskärm">
+        <button type="button" id="btn-home" class="topbar-home" data-i18n-aria="homeAria" aria-label="Till välkomstskärm">
           <svg class="topbar-home-icon" viewBox="0 0 24 24" aria-hidden="true">
             <path
               fill="currentColor"
@@ -63,13 +82,13 @@
                 d="M4.25 5.5h15.5a.75.75 0 0 1 .56 1.25L14 13.06V18a.75.75 0 0 1-.4.66l-3 1.5A.75.75 0 0 1 9.5 19.5v-6.44L3.69 6.75A.75.75 0 0 1 4.25 5.5Z"
               />
             </svg>
-            <span>Filter</span>
+            <span data-i18n="filter">Filter</span>
           </button>
         </div>
       </header>
 
       <main class="stage">
-        <section id="view-welcome" class="view is-active" aria-label="Välkommen">
+        <section id="view-welcome" class="view is-active" data-i18n-aria-label="welcomeLabel" aria-label="Välkommen">
           <div class="welcome-content">
             <div class="welcome-brand">
               <img
@@ -81,10 +100,10 @@
               <span class="welcome-rule" aria-hidden="true"></span>
             </div>
             <div class="welcome-actions">
-              <button type="button" id="btn-about" class="btn-welcome">Om ITA Agency</button>
-              <button type="button" id="btn-books" class="btn-welcome">Urval av Italienska Titlar</button>
-              <button type="button" id="btn-calendar" class="btn-welcome">Hitta Rätt Bokmässa i Italien</button>
-              <button type="button" id="btn-nib" class="btn-welcome btn-welcome-logo" aria-label="New Italian Books sida">
+              <button type="button" id="btn-about" class="btn-welcome" data-i18n="aboutBtn">Om ITA Agency</button>
+              <button type="button" id="btn-books" class="btn-welcome" data-i18n="booksBtn">Urval av Italienska Titlar</button>
+              <button type="button" id="btn-calendar" class="btn-welcome" data-i18n="calendarBtn">Hitta Rätt Bokmässa i Italien</button>
+              <button type="button" id="btn-nib" class="btn-welcome btn-welcome-logo" data-i18n-aria="nibAria" aria-label="New Italian Books sida">
                 <img
                   src="./public/events/logo-newitalianbooks.webp"
                   alt=""
@@ -96,11 +115,11 @@
           </div>
         </section>
 
-        <section id="view-catalog" class="view" aria-hidden="true" aria-label="Katalog">
+        <section id="view-catalog" class="view" aria-hidden="true" data-i18n-aria-label="catalogLabel" aria-label="Katalog">
           <div id="filter-bar" class="filter-bar" hidden>
             <img id="filter-logo" class="filter-logo" alt="" />
             <p id="filter-name" class="filter-name"></p>
-            <button type="button" id="btn-clear-filter" class="filter-clear" aria-label="Visa alla titlar">
+            <button type="button" id="btn-clear-filter" class="filter-clear" data-i18n-aria="clearFilterAria" aria-label="Visa alla titlar">
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path
                   fill="currentColor"
@@ -112,18 +131,18 @@
           <div id="book-grid" class="book-grid"></div>
         </section>
 
-        <section id="view-publishers" class="view" aria-hidden="true" aria-label="Filtrera på förlag">
+        <section id="view-publishers" class="view" aria-hidden="true" data-i18n-aria-label="publishersLabel" aria-label="Filtrera på förlag">
           <div class="view-toolbar">
-            <button type="button" id="btn-back-publishers" class="btn btn-ghost">Tillbaka</button>
-            <h1 class="view-heading">Välj förlag</h1>
+            <button type="button" id="btn-back-publishers" class="btn btn-ghost" data-i18n="back">Tillbaka</button>
+            <h1 class="view-heading" data-i18n="choosePublisher">Välj förlag</h1>
           </div>
-          <p class="view-lead">Visa titlar från ett förlag.</p>
+          <p class="view-lead" data-i18n="choosePublisherLead">Visa titlar från ett förlag.</p>
           <div id="publisher-grid" class="publisher-grid"></div>
         </section>
 
-        <section id="view-book" class="view" aria-hidden="true" aria-label="Bokdetalj">
+        <section id="view-book" class="view" aria-hidden="true" data-i18n-aria-label="bookLabel" aria-label="Bokdetalj">
           <div class="view-toolbar">
-            <button type="button" id="btn-back-book" class="btn btn-ghost">Tillbaka</button>
+            <button type="button" id="btn-back-book" class="btn btn-ghost" data-i18n="back">Tillbaka</button>
           </div>
           <div class="detail-body">
             <div class="detail-cover-col">
@@ -136,39 +155,39 @@
               <p id="detail-summary" class="detail-summary"></p>
               <div class="qr-block">
                 <div id="qr" class="qr" aria-hidden="true"></div>
-                <p class="qr-caption">Skanna QR-koden för mer information på din egen enhet</p>
+                <p class="qr-caption" data-i18n="bookQrCaption">Skanna QR-koden för mer information på din egen enhet</p>
               </div>
             </div>
           </div>
         </section>
 
-        <section id="view-calendar" class="view" aria-hidden="true" aria-label="Kalender">
+        <section id="view-calendar" class="view" aria-hidden="true" data-i18n-aria-label="calendarLabel" aria-label="Kalender">
           <div class="view-toolbar">
-            <h1 class="view-heading">Kalender</h1>
+            <h1 class="view-heading" data-i18n="calendarHeading">Kalender</h1>
           </div>
-          <p class="view-lead">Italienska mässor i samarbete med ITA.</p>
+          <p class="view-lead" data-i18n="calendarLead">Italienska mässor i samarbete med ITA.</p>
           <article id="calendar-content" class="about-content"></article>
         </section>
 
-        <section id="view-fair" class="view" aria-hidden="true" aria-label="Mässa">
+        <section id="view-fair" class="view" aria-hidden="true" data-i18n-aria-label="fairLabel" aria-label="Mässa">
           <div class="view-toolbar">
-            <button type="button" id="btn-back-fair" class="btn btn-ghost">Tillbaka</button>
+            <button type="button" id="btn-back-fair" class="btn btn-ghost" data-i18n="back">Tillbaka</button>
           </div>
           <p id="fair-meta" class="view-lead"></p>
           <article id="fair-content" class="about-content fair-content"></article>
           <div id="fair-qr-wrap" class="fair-qr-wrap" hidden>
             <div class="qr-block">
               <div id="fair-qr" class="qr" aria-hidden="true"></div>
-              <p class="qr-caption">Skanna QR-koden för att veta mer om mässan</p>
+              <p class="qr-caption" data-i18n="fairQrCaption">Skanna QR-koden för att veta mer om mässan</p>
             </div>
           </div>
         </section>
 
-        <section id="view-about" class="view" aria-hidden="true" aria-label="Om oss">
+        <section id="view-about" class="view" aria-hidden="true" data-i18n-aria-label="aboutLabel" aria-label="Om oss">
           <div class="view-toolbar">
-            <h1 class="view-heading">Om oss</h1>
+            <h1 class="view-heading" data-i18n="aboutHeading">Om oss</h1>
           </div>
-          <p class="view-lead">Italian Trade Agency och hur du når oss.</p>
+          <p class="view-lead" data-i18n="aboutLead">Italian Trade Agency och hur du når oss.</p>
           <article id="about-content" class="about-content"></article>
         </section>
 
@@ -180,7 +199,7 @@
           <div class="fair-qr-wrap">
             <div class="qr-block">
               <div id="nib-qr" class="qr" aria-hidden="true"></div>
-              <p class="qr-caption">Skanna QR-koden för att besöka newitalianbooks.it</p>
+              <p class="qr-caption" data-i18n="nibQrCaption">Skanna QR-koden för att besöka newitalianbooks.it</p>
             </div>
           </div>
         </section>
@@ -188,13 +207,13 @@
     </div>
 
     <div id="boot" class="boot" aria-live="polite">
-      <p class="boot-mark">Katalog</p>
-      <p class="boot-sub">Italienska förlag</p>
-      <p id="boot-status" class="boot-status">Öppnar katalogen…</p>
+      <p class="boot-mark" data-i18n="bootMark">Katalog</p>
+      <p class="boot-sub" data-i18n="bootSub">Italienska förlag</p>
+      <p id="boot-status" class="boot-status" data-i18n="bootStatus">Öppnar katalogen…</p>
     </div>
 
     <noscript>
-      <p class="noscript">JavaScript krävs för att visa katalogen.</p>
+      <p class="noscript">JavaScript krävs för att visa katalogen. / JavaScript is required to view the catalogue.</p>
     </noscript>
 
     <script src="./js/qrcode.min.js"></script>

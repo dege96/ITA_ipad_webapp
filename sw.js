@@ -1,4 +1,4 @@
-const CACHE_NAME = "katalog-v17";
+const CACHE_NAME = "katalog-v18";
 const SHELL = [
   "./",
   "./index.html",
@@ -15,6 +15,12 @@ const SHELL = [
   "./massor/bologna.md",
   "./massor/piu-libri.md",
   "./massor/salone.md",
+  "./en/om-oss.md",
+  "./en/newitalianbooks.md",
+  "./en/kalender.md",
+  "./en/massor/bologna.md",
+  "./en/massor/piu-libri.md",
+  "./en/massor/salone.md",
   "./public/catalog.json",
   "./public/ics/bologna.ics",
   "./public/ics/piu-libri.ics",

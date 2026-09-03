@@ -123,6 +123,53 @@ p {
   display: none;
 }
 
+/* —— Language switcher (always visible) —— */
+
+.lang-switcher {
+  position: absolute;
+  top: calc(10px + var(--safe-t));
+  right: calc(var(--pad-x) + var(--safe-r));
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lang-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 32px;
+  padding: 0;
+  border-radius: 6px;
+  border: 2px solid transparent;
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  transition: transform 0.12s ease, border-color 0.12s ease, background-color 0.12s ease;
+}
+
+.lang-btn:active {
+  transform: scale(0.96);
+}
+
+.lang-btn.is-active {
+  border-color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.lang-flag {
+  display: block;
+  width: 28px;
+  height: 18px;
+  border-radius: 2px;
+}
+
+.topbar-actions {
+  padding-right: 100px;
+}
+
 /* —— Kiosk chrome —— */
 
 .topbar,

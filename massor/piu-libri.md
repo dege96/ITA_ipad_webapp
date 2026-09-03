@@ -1,6 +1,7 @@
 <!--
 Mässida — visas när besökaren trycker på mässan i kalendern.
-Fält i kommentaren "fair" används till QR-koden (kalenderhändelse).
+Fält i kommentaren "fair" används till metadata (datum, plats).
+QR-koden länkar till mässans webbsida.
 -->
 
 <!-- fair
@@ -8,7 +9,7 @@ title: Più libri più liberi
 dates: 4–8 december 2026
 start: 2026-12-04
 end: 2026-12-08
-location: Roma (La Nuvola)
+location: Rom (La Nuvola)
 -->
 
 ## Più libri più liberi
