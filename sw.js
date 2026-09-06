@@ -1,4 +1,4 @@
-const CACHE_NAME = "katalog-v24";
+const CACHE_NAME = "katalog-v28";
 const SHELL = [
   "./",
   "./index.html",
@@ -22,12 +22,14 @@ const SHELL = [
   "./en/massor/piu-libri.md",
   "./en/massor/salone.md",
   "./public/catalog.json",
-  "./public/ics/bologna.ics",
-  "./public/ics/piu-libri.ics",
-  "./public/ics/salone.ics",
   "./public/events/piulibri_logo.svg",
   "./public/events/salone_logo.svg",
   "./public/events/bcbf_logo.png",
+  "./public/events/bcbf_bg2.webp",
+  "./public/events/piulibre_bg3.webp",
+  "./public/events/salone_bg3.webp",
+  "./public/events/logo-newitalianbooks.webp",
+  "./public/events/newitalianbooks.webp",
   "./public/background_image.png",
   "./public/logos/ITA-logo/ita-100-welcome.png",
   "./public/logos/ITA-logo/ita-100-header.png",

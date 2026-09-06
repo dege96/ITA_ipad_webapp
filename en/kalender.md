@@ -2,8 +2,6 @@
 Calendar — English content.
 -->
 
-Dates and venues are updated on an ongoing basis.
-
 | Fair | Dates | Venue |
 | --- | --- | --- |
 | [![Più libri più liberi](./public/events/piulibri_logo.svg)](#fair-piu-libri) | 4–8 December 2026 | Rome (La Nuvola) |

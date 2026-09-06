@@ -27,13 +27,14 @@
       calendarHeading: "Bokmässor i Italien",
       calendarLead: "Tryck på en mässa för datum, plats och mer information.",
       fairLabel: "Mässa",
+      fairVisitors: "Besökare",
+      fairDates: "Datum",
+      fairLocation: "Plats",
       fairQrCaption: "Skanna QR-koden för att veta mer om mässan",
       aboutLabel: "Om oss",
       aboutKicker: "Italian Trade Agency",
       aboutHeading: "Om ITA",
       aboutLead: "Vårt uppdrag inom förlagssektorn — och hur du når kontoret i Stockholm.",
-      nibKicker: "Online",
-      nibLead: "Upptäck italiensk litteratur digitalt — skanna QR-koden för att öppna webbplatsen.",
       nibQrCaption: "Skanna QR-koden för att besöka newitalianbooks.it",
       bootMark: "Katalog",
       bootSub: "Italienska förlag",
@@ -68,13 +69,14 @@
       calendarHeading: "Book fairs in Italy",
       calendarLead: "Tap a fair for dates, venue and more information.",
       fairLabel: "Book fair",
+      fairVisitors: "Visitors",
+      fairDates: "Dates",
+      fairLocation: "Venue",
       fairQrCaption: "Scan the QR code to learn more about the fair",
       aboutLabel: "About us",
       aboutKicker: "Italian Trade Agency",
       aboutHeading: "About ITA",
       aboutLead: "Our role in publishing — and how to reach the Stockholm office.",
-      nibKicker: "Online",
-      nibLead: "Discover Italian literature online — scan the QR code to open the website.",
       nibQrCaption: "Scan the QR code to visit newitalianbooks.it",
       bootMark: "Catalogue",
       bootSub: "Italian publishers",
@@ -137,13 +139,13 @@
     viewAbout: document.getElementById("view-about"),
     viewNib: document.getElementById("view-nib"),
     calendarContent: document.getElementById("calendar-content"),
-    fairMeta: document.getElementById("fair-meta"),
     fairBanner: document.getElementById("fair-banner"),
     fairLogo: document.getElementById("fair-logo"),
     fairContent: document.getElementById("fair-content"),
     fairQrWrap: document.getElementById("fair-qr-wrap"),
     fairQr: document.getElementById("fair-qr"),
     aboutContent: document.getElementById("about-content"),
+    nibBody: document.getElementById("nib-body"),
     nibContent: document.getElementById("nib-content"),
     nibQr: document.getElementById("nib-qr"),
     filterBar: document.getElementById("filter-bar"),
@@ -370,7 +372,9 @@
 
   function parseFairSource(source) {
     const text = String(source).replace(/\r\n/g, "\n");
-    const fairBlock = /<!--\s*fair\s+([\s\S]*?)-->/i.exec(text);
+    // "<!-- fair" must be followed by a newline so comments like
+    // "<!-- Fair page — ... -->" are not treated as metadata blocks.
+    const fairBlock = /<!--\s*fair\s*\n([\s\S]*?)-->/i.exec(text);
     const meta = {};
     if (fairBlock) {
       fairBlock[1].split("\n").forEach((line) => {
@@ -379,6 +383,34 @@
       });
     }
     return { meta, html: markdownToHtml(text) };
+  }
+
+  function renderFairInfobox(meta) {
+    const rows = [
+      meta.visitors ? { label: t("fairVisitors"), value: meta.visitors } : null,
+      meta.dates ? { label: t("fairDates"), value: meta.dates } : null,
+      meta.location ? { label: t("fairLocation"), value: meta.location } : null,
+    ].filter(Boolean);
+    if (!rows.length) return "";
+    return (
+      `<dl class="fair-infobox">` +
+      rows
+        .map(
+          (row) =>
+            `<div class="fair-infobox-row"><dt>${escapeHtml(row.label)}</dt><dd>${escapeHtml(row.value)}</dd></div>`
+        )
+        .join("") +
+      `</dl>`
+    );
+  }
+
+  function injectFairInfobox(html, meta) {
+    const infobox = renderFairInfobox(meta);
+    if (!infobox) return html;
+    if (/<h2\b[^>]*>[\s\S]*?<\/h2>/i.test(html)) {
+      return html.replace(/<h2\b[^>]*>[\s\S]*?<\/h2>/i, (heading) => heading + infobox);
+    }
+    return infobox + html;
   }
 
   function fairPageUrl(id) {
@@ -404,6 +436,15 @@
 
   function bookById(id) {
     return catalog.books.find((book) => book.id === id) || null;
+  }
+
+  function bookSummary(book) {
+    const summary = book && book.summary;
+    if (!summary) return "";
+    if (typeof summary === "object") {
+      return summary[lang] || summary.sv || summary.en || "";
+    }
+    return String(summary);
   }
 
   function visibleBooks() {
@@ -543,8 +584,6 @@
 
   function clearFairView() {
     currentFairId = null;
-    els.fairMeta.textContent = "";
-    els.fairMeta.hidden = true;
     clearFairBanner();
     els.fairContent.innerHTML = "";
     els.fairContent.scrollTop = 0;
@@ -554,8 +593,6 @@
 
   function showFairUnavailable() {
     currentFairId = null;
-    els.fairMeta.textContent = "";
-    els.fairMeta.hidden = true;
     clearFairBanner();
     els.fairContent.innerHTML = `<p class="empty-state">${escapeHtml(t("loadError"))}</p>`;
     els.fairQr.innerHTML = "";
@@ -576,10 +613,10 @@
       const markdown = await response.text();
       const { meta, html } = parseFairSource(markdown);
       currentFairId = id;
-      els.fairMeta.hidden = true;
       setFairBanner(meta.image ? publicUrl(meta.image) : "", meta.title || "");
       setFairLogo(meta.logo ? publicUrl(meta.logo) : "", meta.title || "");
-      els.fairContent.innerHTML = html || `<p class="empty-state">${escapeHtml(t("loadError"))}</p>`;
+      const body = html ? injectFairInfobox(html, meta) : "";
+      els.fairContent.innerHTML = body || `<p class="empty-state">${escapeHtml(t("loadError"))}</p>`;
       els.fairQrWrap.hidden = false;
       const qrUrl = meta.website && isSafeUrl(meta.website) ? meta.website : fairPageUrl(id);
       renderQR(qrUrl, els.fairQr);
@@ -602,7 +639,7 @@
     els.detailPublisher.textContent = publisher ? publisher.name : "";
     els.detailTitle.textContent = book.title;
     els.detailAuthor.textContent = book.bookAuthor;
-    els.detailSummary.textContent = book.summary;
+    els.detailSummary.textContent = bookSummary(book);
     renderQR(book.url);
     showView("book");
     els.viewBook.scrollTop = 0;
@@ -628,7 +665,7 @@
     els.bookGrid.scrollTop = 0;
     els.calendarContent.scrollTop = 0;
     els.aboutContent.scrollTop = 0;
-    els.nibContent.scrollTop = 0;
+    els.nibBody.scrollTop = 0;
     clearFairView();
     setFairHash(null);
     showView("welcome");
@@ -753,7 +790,7 @@
       showView("about");
     });
     els.btnNib.addEventListener("click", () => {
-      els.nibContent.scrollTop = 0;
+      els.nibBody.scrollTop = 0;
       renderQR(NIB_SITE_URL, els.nibQr);
       showView("nib");
     });
@@ -837,7 +874,7 @@
     els.calendarContent.addEventListener("scroll", resetIdleTimer, { passive: true });
     els.fairContent.addEventListener("scroll", resetIdleTimer, { passive: true });
     els.aboutContent.addEventListener("scroll", resetIdleTimer, { passive: true });
-    els.nibContent.addEventListener("scroll", resetIdleTimer, { passive: true });
+    els.nibBody.addEventListener("scroll", resetIdleTimer, { passive: true });
   }
 
   async function loadCatalog() {

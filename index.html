@@ -179,7 +179,6 @@
             <img id="fair-banner" class="fair-banner" alt="" draggable="false" hidden>
             <img id="fair-logo" class="fair-logo" alt="" draggable="false" hidden>
           </div>
-          <p id="fair-meta" class="view-lead" hidden></p>
           <div class="fair-body">
             <article id="fair-content" class="about-content fair-content"></article>
             <aside id="fair-qr-wrap" class="fair-qr-wrap" hidden>
@@ -201,17 +200,28 @@
         </section>
 
         <section id="view-nib" class="view" aria-hidden="true" aria-label="New Italian Books">
-          <header class="view-intro">
-            <p class="view-kicker" data-i18n="nibKicker">Online</p>
-            <h1 class="view-heading">New Italian Books</h1>
-            <p class="view-lead" data-i18n="nibLead">Upptäck italiensk litteratur digitalt — skanna QR-koden för att öppna webbplatsen.</p>
-          </header>
-          <article id="nib-content" class="about-content"></article>
-          <div class="fair-qr-wrap">
-            <div class="qr-block">
-              <div id="nib-qr" class="qr" aria-hidden="true"></div>
-              <p class="qr-caption" data-i18n="nibQrCaption">Skanna QR-koden för att besöka newitalianbooks.it</p>
-            </div>
+          <div class="fair-hero nib-hero">
+            <img
+              class="fair-banner"
+              src="./public/events/newitalianbooks.webp"
+              alt=""
+              draggable="false"
+            >
+            <img
+              class="fair-logo"
+              src="./public/events/logo-newitalianbooks.webp"
+              alt="New Italian Books"
+              draggable="false"
+            >
+          </div>
+          <div id="nib-body" class="fair-body">
+            <article id="nib-content" class="about-content fair-content"></article>
+            <aside class="fair-qr-wrap">
+              <div class="qr-block fair-qr-card">
+                <div id="nib-qr" class="qr" aria-hidden="true"></div>
+                <p class="qr-caption" data-i18n="nibQrCaption">Skanna QR-koden för att besöka newitalianbooks.it</p>
+              </div>
+            </aside>
           </div>
         </section>
       </main>
