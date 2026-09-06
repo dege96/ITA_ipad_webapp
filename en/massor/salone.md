@@ -8,10 +8,11 @@ dates: 13–17 May 2027
 start: 2027-05-13
 end: 2027-05-17
 location: Turin (Lingotto Fiere)
+image: events/salone_bg3.webp
+logo: events/salone_logo.svg
+website: https://www.salonelibro.it/eng.html
 -->
 
 ## Salone Internazionale del Libro
 
-Salone Internazionale del Libro in Turin is one of Italy’s foremost international book fairs. The event takes place at Lingotto Fiere and brings together publishers, authors, agents, translators and readers from Italy and abroad.
-
-The fair is both an industry platform and an open cultural event: rights are sold, business contacts are made, and Italian and international publishing is presented to a broad audience.
+Salone Internazionale del Libro is Italy’s largest book fair. Since 1988 it has brought publishers and readers together in Turin — a place to discover new titles, meet authors and celebrate reading. The latest edition drew 254,000 visitors.

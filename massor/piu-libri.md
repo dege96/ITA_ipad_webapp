@@ -10,10 +10,10 @@ dates: 4–8 december 2026
 start: 2026-12-04
 end: 2026-12-08
 location: Rom (La Nuvola)
+image: events/piulibre_bg3.webp
+website: https://plpl.it/piu-libri-piu-liberi-en/
 -->
 
 ## Più libri più liberi
 
-Più libri più liberi är Italiens nationella mässa för små och medelstora förlag. Evenemanget äger rum i Rom, i kongresscentret La Nuvola, och samlar oberoende förlag, författare, översättare och andra aktörer från den italienska bokbranschen.
-
-Mässan är en viktig mötesplats. Här visas nya titlar, knyts kontakter och diskuteras villkoren för ett rikt och mångsidigt utgivningslandskap.
+Più libri più liberi är mässan för små och medelstora förlag. Namnet betyder fler böcker, mer frihet. I Rom på La Nuvola kan besökare upptäcka oberoende förlag, nya titlar och möta författare.

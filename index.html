@@ -174,16 +174,20 @@
         </section>
 
         <section id="view-fair" class="view" aria-hidden="true" data-i18n-aria-label="fairLabel" aria-label="Mässa">
-          <div class="view-toolbar">
-            <button type="button" id="btn-back-fair" class="btn btn-ghost" data-i18n="back">Tillbaka</button>
+          <div class="fair-hero">
+            <button type="button" id="btn-back-fair" class="btn fair-back" data-i18n="back">Tillbaka</button>
+            <img id="fair-banner" class="fair-banner" alt="" draggable="false" hidden>
+            <img id="fair-logo" class="fair-logo" alt="" draggable="false" hidden>
           </div>
-          <p id="fair-meta" class="view-lead"></p>
-          <article id="fair-content" class="about-content fair-content"></article>
-          <div id="fair-qr-wrap" class="fair-qr-wrap" hidden>
-            <div class="qr-block">
-              <div id="fair-qr" class="qr" aria-hidden="true"></div>
-              <p class="qr-caption" data-i18n="fairQrCaption">Skanna QR-koden för att veta mer om mässan</p>
-            </div>
+          <p id="fair-meta" class="view-lead" hidden></p>
+          <div class="fair-body">
+            <article id="fair-content" class="about-content fair-content"></article>
+            <aside id="fair-qr-wrap" class="fair-qr-wrap" hidden>
+              <div class="qr-block fair-qr-card">
+                <div id="fair-qr" class="qr" aria-hidden="true"></div>
+                <p class="qr-caption" data-i18n="fairQrCaption">Skanna QR-koden för att veta mer om mässan</p>
+              </div>
+            </aside>
           </div>
         </section>
 

@@ -1,4 +1,4 @@
-const CACHE_NAME = "katalog-v19";
+const CACHE_NAME = "katalog-v24";
 const SHELL = [
   "./",
   "./index.html",
@@ -27,6 +27,7 @@ const SHELL = [
   "./public/ics/salone.ics",
   "./public/events/piulibri_logo.svg",
   "./public/events/salone_logo.svg",
+  "./public/events/bcbf_logo.png",
   "./public/background_image.png",
   "./public/logos/ITA-logo/ita-100-welcome.png",
   "./public/logos/ITA-logo/ita-100-header.png",

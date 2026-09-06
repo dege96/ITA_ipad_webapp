@@ -138,6 +138,8 @@
     viewNib: document.getElementById("view-nib"),
     calendarContent: document.getElementById("calendar-content"),
     fairMeta: document.getElementById("fair-meta"),
+    fairBanner: document.getElementById("fair-banner"),
+    fairLogo: document.getElementById("fair-logo"),
     fairContent: document.getElementById("fair-content"),
     fairQrWrap: document.getElementById("fair-qr-wrap"),
     fairQr: document.getElementById("fair-qr"),
@@ -506,10 +508,44 @@
     node.removeAttribute("title");
   }
 
+  function clearFairBanner() {
+    els.fairBanner.hidden = true;
+    els.fairBanner.removeAttribute("src");
+    els.fairBanner.alt = "";
+    clearFairLogo();
+  }
+
+  function clearFairLogo() {
+    els.fairLogo.hidden = true;
+    els.fairLogo.removeAttribute("src");
+    els.fairLogo.alt = "";
+  }
+
+  function setFairBanner(src, alt) {
+    if (!src) {
+      clearFairBanner();
+      return;
+    }
+    els.fairBanner.src = src;
+    els.fairBanner.alt = alt || "";
+    els.fairBanner.hidden = false;
+  }
+
+  function setFairLogo(src, alt) {
+    if (!src) {
+      clearFairLogo();
+      return;
+    }
+    els.fairLogo.src = src;
+    els.fairLogo.alt = alt || "";
+    els.fairLogo.hidden = false;
+  }
+
   function clearFairView() {
     currentFairId = null;
     els.fairMeta.textContent = "";
     els.fairMeta.hidden = true;
+    clearFairBanner();
     els.fairContent.innerHTML = "";
     els.fairContent.scrollTop = 0;
     els.fairQr.innerHTML = "";
@@ -520,6 +556,7 @@
     currentFairId = null;
     els.fairMeta.textContent = "";
     els.fairMeta.hidden = true;
+    clearFairBanner();
     els.fairContent.innerHTML = `<p class="empty-state">${escapeHtml(t("loadError"))}</p>`;
     els.fairQr.innerHTML = "";
     els.fairQrWrap.hidden = true;
@@ -538,13 +575,14 @@
       if (!response.ok) throw new Error(`Kunde inte läsa ${url}.`);
       const markdown = await response.text();
       const { meta, html } = parseFairSource(markdown);
-      const metaLine = [meta.dates, meta.location].filter(Boolean).join(" · ");
       currentFairId = id;
-      els.fairMeta.textContent = metaLine;
-      els.fairMeta.hidden = !metaLine;
+      els.fairMeta.hidden = true;
+      setFairBanner(meta.image ? publicUrl(meta.image) : "", meta.title || "");
+      setFairLogo(meta.logo ? publicUrl(meta.logo) : "", meta.title || "");
       els.fairContent.innerHTML = html || `<p class="empty-state">${escapeHtml(t("loadError"))}</p>`;
       els.fairQrWrap.hidden = false;
-      renderQR(fairPageUrl(id), els.fairQr);
+      const qrUrl = meta.website && isSafeUrl(meta.website) ? meta.website : fairPageUrl(id);
+      renderQR(qrUrl, els.fairQr);
       showView("fair");
       setFairHash(id);
       els.fairContent.scrollTop = 0;
@@ -653,6 +691,15 @@
       if (!link) return;
       const fairMatch = /^#fair-([a-z0-9-]+)$/i.exec(link.getAttribute("href") || "");
       if (fairMatch) row.dataset.fairId = fairMatch[1].toLowerCase();
+
+      if (!row.querySelector(".calendar-row-affordance")) {
+        const cell = document.createElement("td");
+        cell.className = "calendar-row-affordance";
+        cell.setAttribute("aria-hidden", "true");
+        cell.innerHTML =
+          '<span class="calendar-row-arrow"><svg viewBox="0 0 24 24" focusable="false"><path fill="currentColor" d="M9.29 6.71a1 1 0 0 0 0 1.41L13.17 12l-3.88 3.88a1 1 0 1 0 1.41 1.41l4.59-4.58a1 1 0 0 0 0-1.42l-4.59-4.58a1 1 0 0 0-1.41 0Z"/></svg></span>';
+        row.appendChild(cell);
+      }
     });
   }
 

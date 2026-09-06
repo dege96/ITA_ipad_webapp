@@ -8,10 +8,11 @@ dates: 5–8 April 2027
 start: 2027-04-05
 end: 2027-04-08
 location: Bologna
+image: events/bcbf_bg2.webp
+logo: events/bcbf_logo.png
+website: https://www.bolognachildrensbookfair.com/en/home/878.html
 -->
 
 ## Bologna Children’s Book Fair
 
-Bologna Children’s Book Fair is one of the world’s leading international meeting places for children’s and young adult literature. Each year the fair brings together publishers, agents, illustrators, authors and other book-industry professionals from around the world.
-
-The fair is an important platform for international collaboration, rights trading, new business contacts and the exchange of ideas about the future of reading and publishing.
+Bologna Children’s Book Fair is the world’s leading fair for children’s and young adult literature. Publishers, illustrators and authors from around the world gather here around books and stories for young readers.
