@@ -2,7 +2,10 @@
   const IDLE_TIMEOUT = 60_000;
   const CATALOG_URL = "./public/catalog.json";
   const NIB_SITE_URL = "https://www.newitalianbooks.it/";
+  const ITA_SITE_URL = "https://www.ice.it/en/";
   const LANG_KEY = "ita-katalog-lang";
+  /** Test flag: new share-QR + landing pages. Legacy QR stays in DOM but is hidden. */
+  const SHARE_QR_TEST = false;
 
   const STRINGS = {
     sv: {
@@ -22,6 +25,7 @@
       publishersKicker: "Katalog",
       bookLabel: "Bokdetalj",
       bookQrCaption: "Skanna QR-koden för mer information på din egen enhet",
+      bookShareQrCaption: "Skanna för webbplats och kontaktkort på din egen enhet",
       calendarLabel: "Kalender",
       calendarKicker: "Evenemang",
       calendarHeading: "Bokmässor i Italien",
@@ -31,11 +35,21 @@
       fairDates: "Datum",
       fairLocation: "Plats",
       fairQrCaption: "Skanna QR-koden för att veta mer om mässan",
+      fairShareQrCaption: "Skanna för webbplats och kalender på din egen enhet",
       aboutLabel: "Om oss",
       aboutKicker: "Italian Trade Agency",
       aboutHeading: "Om ITA",
       aboutLead: "Vårt uppdrag inom förlagssektorn — och hur du når kontoret i Stockholm.",
+      aboutQrCaption: "Skanna QR-koden för att besöka ice.it",
       nibQrCaption: "Skanna QR-koden för att besöka newitalianbooks.it",
+      shareLabel: "Dela",
+      shareVisitWebsite: "Besök webbplats",
+      shareSaveContact: "Spara kontakt",
+      shareAddCalendar: "Lägg till i kalender",
+      shareBookLead: "Öppna webbplatsen eller spara förlaget som kontakt.",
+      shareFairLead: "Öppna mässans webbplats eller lägg till datumen i kalendern.",
+      shareUnavailable: "Informationen kunde inte öppnas.",
+      shareCalendarMissing: "Kalenderdatum saknas för den här mässan.",
       bootMark: "Katalog",
       bootSub: "Italienska förlag",
       bootStatus: "Öppnar katalogen…",
@@ -64,6 +78,7 @@
       publishersKicker: "Catalogue",
       bookLabel: "Book detail",
       bookQrCaption: "Scan the QR code for more information on your own device",
+      bookShareQrCaption: "Scan for website and contact card on your own device",
       calendarLabel: "Calendar",
       calendarKicker: "Events",
       calendarHeading: "Book fairs in Italy",
@@ -73,11 +88,21 @@
       fairDates: "Dates",
       fairLocation: "Venue",
       fairQrCaption: "Scan the QR code to learn more about the fair",
+      fairShareQrCaption: "Scan for website and calendar on your own device",
       aboutLabel: "About us",
       aboutKicker: "Italian Trade Agency",
       aboutHeading: "About ITA",
       aboutLead: "Our role in publishing — and how to reach the Stockholm office.",
+      aboutQrCaption: "Scan the QR code to visit ice.it",
       nibQrCaption: "Scan the QR code to visit newitalianbooks.it",
+      shareLabel: "Share",
+      shareVisitWebsite: "Visit website",
+      shareSaveContact: "Save contact",
+      shareAddCalendar: "Add to calendar",
+      shareBookLead: "Open the website or save the publisher as a contact.",
+      shareFairLead: "Open the fair website or add the dates to your calendar.",
+      shareUnavailable: "This information could not be opened.",
+      shareCalendarMissing: "Calendar dates are missing for this fair.",
       bootMark: "Catalogue",
       bootSub: "Italian publishers",
       bootStatus: "Opening the catalogue…",
@@ -138,16 +163,19 @@
     viewFair: document.getElementById("view-fair"),
     viewAbout: document.getElementById("view-about"),
     viewNib: document.getElementById("view-nib"),
+    viewShare: document.getElementById("view-share"),
     calendarContent: document.getElementById("calendar-content"),
     fairBanner: document.getElementById("fair-banner"),
     fairLogo: document.getElementById("fair-logo"),
     fairContent: document.getElementById("fair-content"),
     fairQrWrap: document.getElementById("fair-qr-wrap"),
     fairQr: document.getElementById("fair-qr"),
+    qrShareFair: document.getElementById("qr-share-fair"),
     aboutContent: document.getElementById("about-content"),
     nibBody: document.getElementById("nib-body"),
     nibContent: document.getElementById("nib-content"),
     nibQr: document.getElementById("nib-qr"),
+    qrShareNib: document.getElementById("qr-share-nib"),
     filterBar: document.getElementById("filter-bar"),
     filterLogo: document.getElementById("filter-logo"),
     filterName: document.getElementById("filter-name"),
@@ -159,6 +187,12 @@
     detailAuthor: document.getElementById("detail-author"),
     detailSummary: document.getElementById("detail-summary"),
     qr: document.getElementById("qr"),
+    qrShareBook: document.getElementById("qr-share-book"),
+    shareLogo: document.getElementById("share-logo"),
+    shareKicker: document.getElementById("share-kicker"),
+    shareTitle: document.getElementById("share-title"),
+    shareLead: document.getElementById("share-lead"),
+    shareActions: document.getElementById("share-actions"),
   };
 
   const views = {
@@ -170,6 +204,7 @@
     fair: els.viewFair,
     about: els.viewAbout,
     nib: els.viewNib,
+    share: els.viewShare,
   };
 
   let catalog = { publishers: [], books: [] };
@@ -180,6 +215,7 @@
   let currentView = "welcome";
   let currentFairId = null;
   let currentBookId = null;
+  let shareMode = false;
 
   function t(key) {
     return (STRINGS[lang] && STRINGS[lang][key]) || STRINGS.sv[key] || key;
@@ -420,7 +456,332 @@
     return url.href;
   }
 
+  function sharePageUrl(kind, id) {
+    const url = new URL(window.location.href);
+    url.search = "";
+    url.hash = `share/${kind}/${id}`;
+    return url.href;
+  }
+
+  function setShareHash(kind, id) {
+    const next = kind && id ? `#share/${kind}/${id}` : "";
+    if (window.location.hash === next) return;
+    if (kind && id) {
+      history.replaceState(null, "", next);
+    } else if (/^#share\//i.test(window.location.hash || "")) {
+      history.replaceState(null, "", window.location.pathname + window.location.search);
+    }
+  }
+
+  function shareRouteFromHash() {
+    const match = /^#share\/(book|fair|publisher)\/([a-z0-9-]+)$/i.exec(window.location.hash || "");
+    if (!match) return null;
+    return { kind: match[1].toLowerCase(), id: match[2].toLowerCase() };
+  }
+
+  function escapeVCard(value) {
+    return String(value).replace(/\\/g, "\\\\").replace(/\n/g, "\\n").replace(/,/g, "\\,").replace(/;/g, "\\;");
+  }
+
+  function buildVCard({ name, org, url, email, phone, address }) {
+    const lines = [
+      "BEGIN:VCARD",
+      "VERSION:3.0",
+      `FN:${escapeVCard(name || org || "")}`,
+    ];
+    if (org) lines.push(`ORG:${escapeVCard(org)}`);
+    if (url) lines.push(`URL:${escapeVCard(url)}`);
+    if (email) lines.push(`EMAIL;TYPE=INTERNET:${escapeVCard(email)}`);
+    if (phone) lines.push(`TEL;TYPE=WORK,VOICE:${escapeVCard(phone)}`);
+    if (address) lines.push(`ADR;TYPE=WORK:;;${escapeVCard(address)};;;;`);
+    lines.push("END:VCARD");
+    return lines.join("\r\n");
+  }
+
+  function isoDateOnly(value) {
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(value || "").trim());
+    return match ? `${match[1]}${match[2]}${match[3]}` : null;
+  }
+
+  function addOneDayIso(yyyymmdd) {
+    const y = Number(yyyymmdd.slice(0, 4));
+    const m = Number(yyyymmdd.slice(4, 6)) - 1;
+    const d = Number(yyyymmdd.slice(6, 8));
+    const date = new Date(Date.UTC(y, m, d));
+    date.setUTCDate(date.getUTCDate() + 1);
+    const yy = date.getUTCFullYear();
+    const mm = String(date.getUTCMonth() + 1).padStart(2, "0");
+    const dd = String(date.getUTCDate()).padStart(2, "0");
+    return `${yy}${mm}${dd}`;
+  }
+
+  function buildIcs({ title, location, description, start, end, url }) {
+    const dtStart = isoDateOnly(start);
+    const dtEndRaw = isoDateOnly(end) || dtStart;
+    if (!dtStart) return null;
+    // All-day DTEND is exclusive in iCalendar.
+    const dtEnd = addOneDayIso(dtEndRaw);
+    const stamp = new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z");
+    const uid = `ita-${dtStart}-${String(title || "event")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")}@katalog`;
+    const lines = [
+      "BEGIN:VCALENDAR",
+      "VERSION:2.0",
+      "PRODID:-//ITA Katalog//Book Fair//SV",
+      "CALSCALE:GREGORIAN",
+      "METHOD:PUBLISH",
+      "BEGIN:VEVENT",
+      `UID:${uid}`,
+      `DTSTAMP:${stamp}`,
+      `DTSTART;VALUE=DATE:${dtStart}`,
+      `DTEND;VALUE=DATE:${dtEnd}`,
+      `SUMMARY:${escapeVCard(title || "")}`,
+    ];
+    if (location) lines.push(`LOCATION:${escapeVCard(location)}`);
+    if (description) lines.push(`DESCRIPTION:${escapeVCard(description)}`);
+    if (url) lines.push(`URL:${escapeVCard(url)}`);
+    lines.push("END:VEVENT", "END:VCALENDAR");
+    return lines.join("\r\n");
+  }
+
+  function downloadTextFile(filename, mime, content) {
+    const blob = new Blob([content], { type: mime });
+    const href = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = href;
+    anchor.download = filename;
+    anchor.rel = "noopener";
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+    setTimeout(() => URL.revokeObjectURL(href), 1500);
+  }
+
+  function slugFilename(value, fallback) {
+    const slug = String(value || "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "");
+    return slug || fallback;
+  }
+
+  function enterShareMode() {
+    shareMode = true;
+    clearTimeout(idleTimer);
+    document.body.classList.add("is-share");
+    els.app.classList.add("is-share");
+  }
+
+  function exitShareMode() {
+    if (!shareMode) return;
+    shareMode = false;
+    document.body.classList.remove("is-share");
+    els.app.classList.remove("is-share");
+    setShareHash(null, null);
+    resetIdleTimer();
+  }
+
+  function clearShareView() {
+    els.shareLogo.hidden = true;
+    els.shareLogo.removeAttribute("src");
+    els.shareLogo.alt = "";
+    els.shareKicker.textContent = "";
+    els.shareTitle.textContent = "";
+    els.shareLead.textContent = "";
+    els.shareActions.innerHTML = "";
+  }
+
+  function renderShareActions(actions) {
+    els.shareActions.innerHTML = actions
+      .map((action) => {
+        if (action.href) {
+          return `<a class="share-action" href="${escapeHtml(action.href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(
+            action.label
+          )}</a>`;
+        }
+        return `<button type="button" class="share-action" data-share-action="${escapeHtml(action.id)}">${escapeHtml(
+          action.label
+        )}</button>`;
+      })
+      .join("");
+  }
+
+  function openShareUnavailable() {
+    enterShareMode();
+    clearShareView();
+    els.shareTitle.textContent = t("shareUnavailable");
+    els.shareLead.textContent = "";
+    renderShareActions([]);
+    showView("share");
+  }
+
+  function openSharePublisher(publisher, kicker) {
+    if (!publisher) {
+      openShareUnavailable();
+      return;
+    }
+    enterShareMode();
+    clearShareView();
+    setShareHash("publisher", publisher.id);
+    if (publisher.logo) {
+      els.shareLogo.src = publicUrl(publisher.logo);
+      els.shareLogo.alt = publisher.name;
+      els.shareLogo.hidden = false;
+    }
+    els.shareKicker.textContent = kicker || "";
+    els.shareTitle.textContent = publisher.name;
+    els.shareLead.textContent = t("shareBookLead");
+    const website = publisher.url && isSafeUrl(publisher.url) ? publisher.url : "";
+    const actions = [];
+    if (website) {
+      actions.push({ id: "website", label: t("shareVisitWebsite"), href: website });
+    }
+    actions.push({ id: "vcard", label: t("shareSaveContact") });
+    renderShareActions(actions);
+    els.shareActions.dataset.shareKind = "publisher";
+    els.shareActions.dataset.shareId = publisher.id;
+    showView("share");
+  }
+
+  function openShareBook(id) {
+    const book = bookById(id);
+    if (!book) {
+      openShareUnavailable();
+      return;
+    }
+    const publisher = publisherById(book.publisherId);
+    if (!publisher) {
+      openShareUnavailable();
+      return;
+    }
+    enterShareMode();
+    clearShareView();
+    setShareHash("book", book.id);
+    if (publisher.logo) {
+      els.shareLogo.src = publicUrl(publisher.logo);
+      els.shareLogo.alt = publisher.name;
+      els.shareLogo.hidden = false;
+    }
+    els.shareKicker.textContent = "";
+    els.shareTitle.textContent = publisher.name;
+    els.shareLead.textContent = t("shareBookLead");
+    const website =
+      (book.url && isSafeUrl(book.url) && book.url) ||
+      (publisher.url && isSafeUrl(publisher.url) && publisher.url) ||
+      "";
+    const actions = [];
+    if (website) {
+      actions.push({ id: "website", label: t("shareVisitWebsite"), href: website });
+    }
+    actions.push({ id: "vcard", label: t("shareSaveContact") });
+    renderShareActions(actions);
+    els.shareActions.dataset.shareKind = "book";
+    els.shareActions.dataset.shareId = book.id;
+    showView("share");
+  }
+
+  async function openShareFair(id) {
+    const url = contentUrls().fairs[id];
+    if (!url) {
+      openShareUnavailable();
+      return;
+    }
+    try {
+      const response = await fetch(url, { cache: "no-cache" });
+      if (!response.ok) throw new Error(`Kunde inte läsa ${url}.`);
+      const markdown = await response.text();
+      const { meta } = parseFairSource(markdown);
+      enterShareMode();
+      clearShareView();
+      setShareHash("fair", id);
+      if (meta.logo) {
+        els.shareLogo.src = publicUrl(meta.logo);
+        els.shareLogo.alt = meta.title || "";
+        els.shareLogo.hidden = false;
+      }
+      els.shareKicker.textContent = meta.dates || "";
+      els.shareTitle.textContent = meta.title || id;
+      els.shareLead.textContent = t("shareFairLead");
+      const website = meta.website && isSafeUrl(meta.website) ? meta.website : "";
+      const actions = [];
+      if (website) {
+        actions.push({ id: "website", label: t("shareVisitWebsite"), href: website });
+      }
+      actions.push({ id: "ics", label: t("shareAddCalendar") });
+      renderShareActions(actions);
+      els.shareActions.dataset.shareKind = "fair";
+      els.shareActions.dataset.shareId = id;
+      els.shareActions.dataset.fairStart = meta.start || "";
+      els.shareActions.dataset.fairEnd = meta.end || "";
+      els.shareActions.dataset.fairLocation = meta.location || "";
+      els.shareActions.dataset.fairWebsite = website;
+      els.shareActions.dataset.fairTitle = meta.title || id;
+      showView("share");
+    } catch (error) {
+      console.error(error);
+      openShareUnavailable();
+    }
+  }
+
+  async function openShareRoute(route) {
+    if (!route) return false;
+    if (route.kind === "book") {
+      openShareBook(route.id);
+      return true;
+    }
+    if (route.kind === "publisher") {
+      openSharePublisher(publisherById(route.id));
+      return true;
+    }
+    if (route.kind === "fair") {
+      await openShareFair(route.id);
+      return true;
+    }
+    return false;
+  }
+
+  function handleShareAction(actionId) {
+    const kind = els.shareActions.dataset.shareKind;
+    const id = els.shareActions.dataset.shareId;
+    if (actionId === "vcard") {
+      let publisher = null;
+      if (kind === "publisher") publisher = publisherById(id);
+      if (kind === "book") {
+        const book = bookById(id);
+        publisher = book ? publisherById(book.publisherId) : null;
+      }
+      if (!publisher) return;
+      const vcard = buildVCard({
+        name: publisher.name,
+        org: publisher.name,
+        url: publisher.url,
+        email: publisher.email,
+        phone: publisher.phone,
+        address: publisher.address,
+      });
+      downloadTextFile(`${slugFilename(publisher.id || publisher.name, "contact")}.vcf`, "text/vcard;charset=utf-8", vcard);
+      return;
+    }
+    if (actionId === "ics") {
+      const ics = buildIcs({
+        title: els.shareActions.dataset.fairTitle,
+        location: els.shareActions.dataset.fairLocation,
+        description: els.shareActions.dataset.fairTitle,
+        start: els.shareActions.dataset.fairStart,
+        end: els.shareActions.dataset.fairEnd,
+        url: els.shareActions.dataset.fairWebsite,
+      });
+      if (!ics) {
+        els.shareLead.textContent = t("shareCalendarMissing");
+        return;
+      }
+      downloadTextFile(`${slugFilename(id, "fair")}.ics`, "text/calendar;charset=utf-8", ics);
+    }
+  }
+
   function setFairHash(id) {
+    if (shareMode) return;
     const next = id ? `#fair-${id}` : "";
     if (window.location.hash === next) return;
     if (id) {
@@ -453,6 +814,13 @@
   }
 
   function showView(name) {
+    if (name !== "share" && shareMode) {
+      shareMode = false;
+      document.body.classList.remove("is-share");
+      els.app.classList.remove("is-share");
+      setShareHash(null, null);
+      resetIdleTimer();
+    }
     currentView = name;
     Object.entries(views).forEach(([key, node]) => {
       const active = key === name;
@@ -588,6 +956,7 @@
     els.fairContent.innerHTML = "";
     els.fairContent.scrollTop = 0;
     els.fairQr.innerHTML = "";
+    if (els.qrShareFair) els.qrShareFair.innerHTML = "";
     els.fairQrWrap.hidden = true;
   }
 
@@ -596,6 +965,7 @@
     clearFairBanner();
     els.fairContent.innerHTML = `<p class="empty-state">${escapeHtml(t("loadError"))}</p>`;
     els.fairQr.innerHTML = "";
+    if (els.qrShareFair) els.qrShareFair.innerHTML = "";
     els.fairQrWrap.hidden = true;
     showView("fair");
     els.fairContent.scrollTop = 0;
@@ -618,8 +988,12 @@
       const body = html ? injectFairInfobox(html, meta) : "";
       els.fairContent.innerHTML = body || `<p class="empty-state">${escapeHtml(t("loadError"))}</p>`;
       els.fairQrWrap.hidden = false;
-      const qrUrl = meta.website && isSafeUrl(meta.website) ? meta.website : fairPageUrl(id);
-      renderQR(qrUrl, els.fairQr);
+      const legacyUrl = meta.website && isSafeUrl(meta.website) ? meta.website : fairPageUrl(id);
+      // Keep legacy QR generation so it can be re-enabled without code loss.
+      renderQR(legacyUrl, els.fairQr);
+      if (SHARE_QR_TEST && els.qrShareFair) {
+        renderQR(sharePageUrl("fair", id), els.qrShareFair);
+      }
       showView("fair");
       setFairHash(id);
       els.fairContent.scrollTop = 0;
@@ -640,7 +1014,11 @@
     els.detailTitle.textContent = book.title;
     els.detailAuthor.textContent = book.bookAuthor;
     els.detailSummary.textContent = bookSummary(book);
+    // Legacy QR path retained for easy rollback.
     renderQR(book.url);
+    if (SHARE_QR_TEST && els.qrShareBook) {
+      renderQR(sharePageUrl("book", book.id), els.qrShareBook);
+    }
     showView("book");
     els.viewBook.scrollTop = 0;
     const body = els.viewBook.querySelector(".detail-body");
@@ -657,6 +1035,7 @@
   }
 
   function resetToHome() {
+    if (shareMode) return;
     selectedPublisherId = null;
     currentBookId = null;
     updateFilterBar();
@@ -670,9 +1049,11 @@
     setFairHash(null);
     showView("welcome");
     els.qr.innerHTML = "";
+    if (els.qrShareBook) els.qrShareBook.innerHTML = "";
   }
 
   function resetIdleTimer() {
+    if (shareMode) return;
     clearTimeout(idleTimer);
     idleTimer = setTimeout(resetToHome, IDLE_TIMEOUT);
   }
@@ -690,14 +1071,26 @@
 
   function enhanceAboutHtml(html) {
     const match = /<h2>(Kontakt|Contact)<\/h2>/i.exec(html);
-    if (!match) return `<div class="about-body">${html}</div>`;
+    const qrBlock =
+      `<div class="qr-block fair-qr-card contact-qr">` +
+      `<div id="about-qr" class="qr" aria-hidden="true"></div>` +
+      `<p class="qr-caption">${escapeHtml(t("aboutQrCaption"))}</p>` +
+      `</div>`;
+    if (!match) {
+      return `<div class="about-body">${html}</div><aside class="contact-panel" aria-label="Kontakt">${qrBlock}</aside>`;
+    }
     const idx = html.indexOf(match[0]);
     const body = html.slice(0, idx).trim();
     const contact = html.slice(idx).trim();
     return (
       `<div class="about-body">${body}</div>` +
-      `<aside class="contact-panel" aria-label="${escapeHtml(match[1])}">${contact}</aside>`
+      `<aside class="contact-panel" aria-label="${escapeHtml(match[1])}">${contact}${qrBlock}</aside>`
     );
+  }
+
+  function renderAboutQr() {
+    const mount = document.getElementById("about-qr");
+    if (mount) renderQR(ITA_SITE_URL, mount);
   }
 
   async function loadMarkdown(url, target, enhance) {
@@ -714,8 +1107,9 @@
     }
   }
 
-  function loadAbout() {
-    return loadMarkdown(contentUrls().about, els.aboutContent, enhanceAboutHtml);
+  async function loadAbout() {
+    await loadMarkdown(contentUrls().about, els.aboutContent, enhanceAboutHtml);
+    renderAboutQr();
   }
 
   function loadNib() {
@@ -769,8 +1163,14 @@
       await openFair(currentFairId);
     } else if (currentView === "book" && currentBookId) {
       openBook(currentBookId);
+    } else if (currentView === "about") {
+      renderAboutQr();
     } else if (currentView === "nib") {
       renderQR(NIB_SITE_URL, els.nibQr);
+      if (SHARE_QR_TEST && els.qrShareNib) renderQR(NIB_SITE_URL, els.qrShareNib);
+    } else if (currentView === "share") {
+      const route = shareRouteFromHash();
+      if (route) await openShareRoute(route);
     }
   }
 
@@ -787,11 +1187,13 @@
     });
     els.btnAbout.addEventListener("click", () => {
       els.aboutContent.scrollTop = 0;
+      renderAboutQr();
       showView("about");
     });
     els.btnNib.addEventListener("click", () => {
       els.nibBody.scrollTop = 0;
       renderQR(NIB_SITE_URL, els.nibQr);
+      if (SHARE_QR_TEST && els.qrShareNib) renderQR(NIB_SITE_URL, els.qrShareNib);
       showView("nib");
     });
     els.btnPublishers.addEventListener("click", () => {
@@ -823,6 +1225,12 @@
     document.addEventListener(
       "click",
       (event) => {
+        const shareAction = event.target.closest("[data-share-action]");
+        if (shareAction) {
+          event.preventDefault();
+          handleShareAction(shareAction.getAttribute("data-share-action"));
+          return;
+        }
         const link = event.target.closest("a[href]");
         if (!link) return;
         const href = (link.getAttribute("href") || "").trim().replace(/&amp;/g, "&");
@@ -832,6 +1240,8 @@
           openFair(fairMatch[1].toLowerCase());
           return;
         }
+        // In share mode (phone landing), allow https / mailto / tel / downloads.
+        if (shareMode) return;
         if (/^(https?:|\/\/|mailto:|tel:)/i.test(href)) {
           event.preventDefault();
         }
@@ -900,10 +1310,26 @@
     return match ? match[1].toLowerCase() : null;
   }
 
+  async function routeFromLocation() {
+    const shareRoute = shareRouteFromHash();
+    if (shareRoute) {
+      await openShareRoute(shareRoute);
+      return;
+    }
+    if (shareMode) exitShareMode();
+    const deepFair = fairIdFromHash();
+    if (deepFair && contentUrls().fairs[deepFair]) {
+      await openFair(deepFair);
+    }
+  }
+
   async function init() {
     lang = readStoredLang();
     applyStaticTranslations();
     bindEvents();
+    window.addEventListener("hashchange", () => {
+      routeFromLocation().catch((error) => console.error(error));
+    });
     resetIdleTimer();
     try {
       catalog = await loadCatalog();
@@ -912,11 +1338,16 @@
       updateFilterBar();
       precacheAssets();
       await Promise.all([loadAbout(), loadCalendar(), loadNib()]);
-      const deepFair = fairIdFromHash();
-      if (deepFair && contentUrls().fairs[deepFair]) {
-        await openFair(deepFair);
+      const shareRoute = shareRouteFromHash();
+      if (shareRoute) {
+        await openShareRoute(shareRoute);
       } else {
-        showView("welcome");
+        const deepFair = fairIdFromHash();
+        if (deepFair && contentUrls().fairs[deepFair]) {
+          await openFair(deepFair);
+        } else {
+          showView("welcome");
+        }
       }
       els.boot.classList.add("is-done");
       els.boot.setAttribute("aria-hidden", "true");

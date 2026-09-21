@@ -10,6 +10,8 @@ location: Turin (Lingotto Fiere)
 image: events/salone_bg3.webp
 logo: events/salone_logo.svg
 website: https://www.salonelibro.it/eng.html
+start: 2027-05-13
+end: 2027-05-17
 -->
 
 ## Salone Internazionale del Libro

@@ -156,9 +156,14 @@
               <h1 id="detail-title" class="detail-title"></h1>
               <p id="detail-author" class="detail-author"></p>
               <p id="detail-summary" class="detail-summary"></p>
-              <div class="qr-block">
+              <!-- Legacy QR (active). Share-QR test kept hidden for later. -->
+              <div class="qr-block qr-legacy">
                 <div id="qr" class="qr" aria-hidden="true"></div>
                 <p class="qr-caption" data-i18n="bookQrCaption">Skanna QR-koden för mer information på din egen enhet</p>
+              </div>
+              <div class="qr-block qr-share-block" hidden>
+                <div id="qr-share-book" class="qr" aria-hidden="true"></div>
+                <p class="qr-caption" data-i18n="bookShareQrCaption">Skanna för webbplats och kontaktkort på din egen enhet</p>
               </div>
             </div>
           </div>
@@ -182,9 +187,14 @@
           <div class="fair-body">
             <article id="fair-content" class="about-content fair-content"></article>
             <aside id="fair-qr-wrap" class="fair-qr-wrap" hidden>
-              <div class="qr-block fair-qr-card">
+              <!-- Legacy QR (active). Share-QR test kept hidden for later. -->
+              <div class="qr-block fair-qr-card qr-legacy">
                 <div id="fair-qr" class="qr" aria-hidden="true"></div>
                 <p class="qr-caption" data-i18n="fairQrCaption">Skanna QR-koden för att veta mer om mässan</p>
+              </div>
+              <div class="qr-block fair-qr-card qr-share-block" hidden>
+                <div id="qr-share-fair" class="qr" aria-hidden="true"></div>
+                <p class="qr-caption" data-i18n="fairShareQrCaption">Skanna för webbplats och kalender på din egen enhet</p>
               </div>
             </aside>
           </div>
@@ -217,11 +227,34 @@
           <div id="nib-body" class="fair-body">
             <article id="nib-content" class="about-content fair-content"></article>
             <aside class="fair-qr-wrap">
-              <div class="qr-block fair-qr-card">
+              <!-- Legacy QR (active). Share-QR test kept hidden for later. -->
+              <div class="qr-block fair-qr-card qr-legacy">
                 <div id="nib-qr" class="qr" aria-hidden="true"></div>
                 <p class="qr-caption" data-i18n="nibQrCaption">Skanna QR-koden för att besöka newitalianbooks.it</p>
               </div>
+              <div class="qr-block fair-qr-card qr-share-block" hidden>
+                <div id="qr-share-nib" class="qr" aria-hidden="true"></div>
+                <p class="qr-caption" data-i18n="nibQrCaption">Skanna QR-koden för att besöka newitalianbooks.it</p>
+              </div>
             </aside>
+          </div>
+        </section>
+
+        <section id="view-share" class="view" aria-hidden="true" data-i18n-aria-label="shareLabel" aria-label="Dela">
+          <div class="share-shell">
+            <img
+              class="share-brand"
+              src="./public/logos/ITA-logo/ita-100-header.png"
+              alt="Italian Trade Agency"
+              draggable="false"
+            />
+            <div class="share-card">
+              <img id="share-logo" class="share-logo" alt="" draggable="false" hidden />
+              <p id="share-kicker" class="share-kicker"></p>
+              <h1 id="share-title" class="share-title"></h1>
+              <p id="share-lead" class="share-lead"></p>
+              <div id="share-actions" class="share-actions"></div>
+            </div>
           </div>
         </section>
       </main>

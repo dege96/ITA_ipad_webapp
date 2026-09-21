@@ -340,7 +340,7 @@ p {
 }
 
 #view-about .view-intro {
-  max-width: 68rem;
+  max-width: none;
 }
 
 .view-intro .view-toolbar {
@@ -722,6 +722,163 @@ p {
   color: var(--chrome-muted);
 }
 
+/* Share-QR test kept in DOM; toggle via SHARE_QR_TEST + these classes */
+.qr-share-block[hidden],
+.qr-share-block {
+  display: none !important;
+}
+
+/* —— Share landing (phone after QR scan) —— */
+
+body.is-share,
+body.is-share #app {
+  overflow: auto;
+  position: relative;
+  height: auto;
+  min-height: 100%;
+}
+
+body.is-share {
+  -webkit-user-select: text;
+  user-select: text;
+  background:
+    radial-gradient(120% 80% at 50% -10%, rgba(196, 163, 90, 0.22), transparent 55%),
+    linear-gradient(165deg, #1a1210 0%, #2a1814 42%, #120e0c 100%);
+}
+
+body.is-share #app.is-share .topbar,
+body.is-share #app.is-share .lang-switcher {
+  display: none !important;
+}
+
+body.is-share #app.is-share::before {
+  display: none;
+}
+
+body.is-share #app.is-share {
+  background: transparent;
+  height: auto;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+body.is-share #app.is-share .stage {
+  height: auto;
+  min-height: 100vh;
+  min-height: 100dvh;
+  flex: none;
+}
+
+body.is-share #view-share {
+  position: relative;
+  inset: auto;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+#view-share {
+  padding: 0;
+  background: transparent;
+}
+
+#view-share.is-active {
+  display: flex;
+}
+
+.share-shell {
+  width: min(28rem, 100%);
+  margin: 0 auto;
+  padding: max(28px, calc(16px + var(--safe-t))) 22px max(40px, calc(24px + var(--safe-b)));
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.share-brand {
+  width: min(220px, 58%);
+  height: auto;
+  align-self: center;
+  opacity: 0.92;
+}
+
+.share-card {
+  padding: 28px 22px 24px;
+  border-radius: 18px;
+  background: rgba(255, 249, 241, 0.96);
+  color: var(--ink);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+}
+
+.share-logo {
+  display: block;
+  width: auto;
+  max-width: 160px;
+  max-height: 64px;
+  object-fit: contain;
+  margin: 0 0 18px;
+}
+
+.share-kicker {
+  margin: 0 0 8px;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.share-title {
+  margin: 0 0 10px;
+  font-size: 1.55rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--ink);
+}
+
+.share-lead {
+  margin: 0 0 22px;
+  font-size: 1rem;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.share-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.share-action {
+  appearance: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 12px 18px;
+  border-radius: 12px;
+  border: 1px solid rgba(26, 18, 16, 0.14);
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 600;
+  font-size: 1.02rem;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.share-action[href],
+.share-action:first-child {
+  background: var(--burgundy);
+  border-color: transparent;
+  color: #fff;
+}
+
+.share-action:active {
+  transform: translateY(1px);
+}
+
 /* —— Welcome —— */
 
 #view-welcome {
@@ -867,6 +1024,94 @@ p {
   font-size: 1.05rem;
   text-decoration: none;
   border-bottom: 1px solid rgba(196, 163, 90, 0.45);
+}
+
+.contact-panel .contact-qr {
+  /* Match fair-qr-card: compact card centered in the panel */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  width: fit-content;
+  max-width: 100%;
+  margin: 22px auto 0;
+  box-sizing: border-box;
+}
+
+.contact-panel .contact-qr .qr {
+  flex: 0 0 160px;
+  width: 160px;
+  height: 160px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.contact-panel .contact-qr .qr > img,
+.contact-panel .contact-qr .qr > canvas,
+.contact-panel .contact-qr .qr > table {
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0;
+  object-fit: contain;
+}
+
+.contact-panel .contact-qr .qr-caption {
+  max-width: 10.5rem;
+  margin: 0;
+  text-align: center;
+  color: var(--chrome-muted);
+}
+
+/* About: contact panel top aligns with view-kicker */
+#view-about {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+  grid-template-rows: auto minmax(0, 1fr);
+  column-gap: 36px;
+  align-items: start;
+  overflow: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding-left: var(--pad-x);
+  padding-right: var(--pad-x);
+  padding-bottom: var(--safe-b);
+}
+
+#view-about .view-intro {
+  grid-column: 1;
+  grid-row: 1;
+  max-width: none;
+  width: auto;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+#view-about .about-content.about-layout {
+  display: contents;
+  max-width: none;
+  padding: 0;
+  overflow: visible;
+}
+
+#view-about .about-body {
+  grid-column: 1;
+  grid-row: 2;
+  min-width: 0;
+  padding-bottom: 36px;
+}
+
+#view-about .contact-panel {
+  grid-column: 2;
+  grid-row: 1 / -1;
+  width: 100%;
+  max-width: 360px;
+  margin-top: 36px; /* match .view-intro padding-top → align with kicker */
+  justify-self: stretch;
 }
 
 .about-content h1,
@@ -1408,6 +1653,13 @@ p {
     max-width: 360px;
     position: sticky;
     top: 0;
+  }
+
+  #view-about .contact-panel {
+    flex: none;
+    margin-top: 30px; /* match landscape .view-intro padding-top */
+    position: sticky;
+    top: 30px;
   }
 
   #view-calendar .about-content {

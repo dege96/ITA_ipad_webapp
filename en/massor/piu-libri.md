@@ -9,6 +9,8 @@ dates: 4–8 December 2026
 location: Rome (La Nuvola)
 image: events/piulibre_bg3.webp
 website: https://plpl.it/piu-libri-piu-liberi-en/
+start: 2026-12-04
+end: 2026-12-08
 -->
 
 ## Più libri più liberi
