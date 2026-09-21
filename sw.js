@@ -1,4 +1,4 @@
-const CACHE_NAME = "katalog-v34";
+const CACHE_NAME = "katalog-v35";
 const SHELL = [
   "./",
   "./index.html",

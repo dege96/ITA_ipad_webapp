@@ -1102,6 +1102,7 @@ body.is-share #view-share {
   grid-column: 1;
   grid-row: 2;
   min-width: 0;
+  padding-top: 28px;
   padding-bottom: 36px;
 }
 
